@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Salgueiro's Barbearia</title>
+  <meta name="description" content="Salgueiro's Barbearia: cortes, barba e produtos, com a assinatura da casa.">
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="icon" href="assets/images/logo/logo-salgueiros.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <script src="js/dados.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/servicos.js" defer></script>
+  <script src="js/home.js" defer></script>
+  <script src="js/carrossel.js" defer></script>
+  <script src="js/galeria.js" defer></script>
+</head>
+<body id="topo" data-pagina="home">
+
+  <!-- Navbar, menu mobile e rodapé são montados por js/main.js -->
+
+  <main>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" aria-label="Apresentação">
+      <div class="hero__fundo media" data-imagem="hero" data-alt="" data-label="Fotografia da barbearia · 16:9"></div>
+      <div class="hero__conteudo container">
+        <h1 class="hero__titulo">Salgueiro's <span>Barbearia</span></h1>
+        <div class="hero__divisor" aria-hidden="true"></div>
+        <p class="hero__slogan">Tradição, precisão e um corte à sua medida.</p>
+        <div class="hero__acoes">
+          <a class="btn btn--primario" data-link="marcacoes" href="#">Marcar agora</a>
+          <a class="btn btn--secundario" href="#servicos">Ver serviços</a>
+        </div>
+      </div>
+      <a class="hero__scroll" href="#sobre" aria-label="Continuar para a secção sobre a barbearia">
+        <svg class="icone" aria-hidden="true"><use href="#i-seta-baixo"></use></svg>
+      </a>
+    </section>
+
+    <!-- ===== SOBRE A BARBEARIA E O BARBEIRO ===== -->
+    <section class="secao" id="sobre">
+      <div class="container">
+
+        <div class="sobre__bloco" data-revelar>
+          <div class="sobre__media media media--3x4" data-imagem="barbearia" data-alt="Fachada da Salgueiro's Barbearia, com montras decoradas" data-label="Fotografia da barbearia · 3:4"></div>
+          <div class="sobre__texto">
+            <p class="secao__sobretitulo">A barbearia</p>
+            <h2 class="sobre__titulo">Uma casa feita de tradição</h2>
+            <p>Na Salgueiro's, cada visita é mais do que um corte. É um momento para abrandar, conversar e sair com a imagem que procura. Juntamos as técnicas clássicas de barbearia a um olhar atual, num espaço pensado para o seu conforto.</p>
+            <p>Trabalhamos com marcação para que nunca tenha de esperar, e com produtos escolhidos a dedo para cuidar do seu cabelo e da sua barba também em casa.</p>
+          </div>
+        </div>
+
+        <div class="sobre__bloco sobre__bloco--invertido" data-revelar>
+          <div class="sobre__media media media--4x5" data-imagem="barbeiro" data-alt="Retrato do barbeiro Salgueiro" data-label="Retrato do barbeiro · 4:5"></div>
+          <div class="sobre__texto">
+            <p class="secao__sobretitulo">O barbeiro</p>
+            <h2 class="sobre__titulo">Hélder Salgueiro</h2>
+            <p class="sobre__cargo">Fundador e mestre barbeiro</p>
+            <p>Com mais de dez anos de tesoura na mão, Salgueiro fez do pormenor a sua assinatura. Começou como aprendiz, formou-se em barbearia clássica e abriu a sua própria casa para trabalhar como acredita: sem pressas e com atenção a cada cliente.</p>
+            <ul class="etiquetas" aria-label="Especialidades">
+              <li>Degradé</li>
+              <li>Barba à navalha</li>
+              <li>Corte social</li>
+            </ul>
+            <dl class="sobre__numeros">
+              <div><dt>+10</dt><dd>anos de experiência</dd></div>
+              <div><dt>+5 000</dt><dd>cortes realizados</dd></div>
+              <div><dt>4,9</dt><dd>classificação média</dd></div>
+            </dl>
+            <a class="btn btn--contorno" data-link="marcacoes" href="#">Marcar com Salgueiro</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== SERVIÇOS ===== -->
+    <section class="secao secao--preta" id="servicos">
+      <div class="container">
+        <header class="secao__cabecalho" data-revelar>
+          <p class="secao__sobretitulo">Serviços</p>
+          <h2 class="secao__titulo">Os nossos serviços</h2>
+          <p class="secao__texto">Do corte social ao degradé, da barba à limpeza de pele. E, para quem quer tudo, o ALL IN.</p>
+        </header>
+        <article class="assinatura" id="servico-assinatura" data-revelar></article>
+        <ul class="servicos__grelha" id="servicos-lista"></ul>
+        <p class="secao__acao"><a class="btn btn--secundario" href="servicos.html">Ver todos os serviços</a></p>
+      </div>
+    </section>
+
+    <!-- ===== PRODUTOS EM DESTAQUE ===== -->
+    <section class="secao" id="produtos">
+      <div class="container">
+        <header class="secao__cabecalho" data-revelar>
+          <p class="secao__sobretitulo">Loja</p>
+          <h2 class="secao__titulo">Mais vendidos da loja</h2>
+          <p class="secao__texto">Os produtos que o barbeiro usa e recomenda, disponíveis na barbearia.</p>
+        </header>
+        <div class="carrossel" role="region" aria-label="Produtos em destaque" data-revelar>
+          <ul class="carrossel__pista" id="produtos-pista" tabindex="0"></ul>
+          <div class="carrossel__controlos">
+            <button class="carrossel__seta" type="button" data-anterior aria-label="Produtos anteriores">
+              <svg class="icone" aria-hidden="true"><use href="#i-seta-esquerda"></use></svg>
+            </button>
+            <div class="carrossel__pontos"></div>
+            <button class="carrossel__seta" type="button" data-seguinte aria-label="Produtos seguintes">
+              <svg class="icone" aria-hidden="true"><use href="#i-seta-direita"></use></svg>
+            </button>
+          </div>
+        </div>
+        <p class="secao__acao"><a class="btn btn--contorno" href="produtos.html">Ver todos os produtos</a></p>
+      </div>
+    </section>
+
+    <!-- ===== GALERIA ===== -->
+    <section class="secao secao--preta" id="galeria">
+      <div class="container">
+        <header class="secao__cabecalho" data-revelar>
+          <p class="secao__sobretitulo">Galeria</p>
+          <h2 class="secao__titulo">Cortes dos nossos clientes</h2>
+          <p class="secao__texto">Alguns dos trabalhos que saíram da nossa cadeira.</p>
+        </header>
+      </div>
+      <!-- Faixas de fotografias em movimento, montadas por js/galeria.js -->
+      <div class="galeria__faixas" id="galeria-faixas"></div>
+    </section>
+
+  </main>
+
+  <!-- ===== LIGHTBOX ===== -->
+  <dialog class="lightbox" id="lightbox" aria-label="Fotografia ampliada">
+    <div class="lightbox__palco"></div>
+    <p class="lightbox__legenda" aria-live="polite"></p>
+    <button class="lightbox__botao lightbox__botao--fechar" type="button" data-fechar aria-label="Fechar">
+      <svg class="icone" aria-hidden="true"><use href="#i-fechar"></use></svg>
+    </button>
+    <button class="lightbox__botao lightbox__botao--anterior" type="button" data-anterior aria-label="Fotografia anterior">
+      <svg class="icone" aria-hidden="true"><use href="#i-seta-esquerda"></use></svg>
+    </button>
+    <button class="lightbox__botao lightbox__botao--seguinte" type="button" data-seguinte aria-label="Fotografia seguinte">
+      <svg class="icone" aria-hidden="true"><use href="#i-seta-direita"></use></svg>
+    </button>
+  </dialog>
+
+</body>
+</html>

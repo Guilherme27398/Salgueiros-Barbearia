@@ -1,0 +1,472 @@
+/* ===== PÁGINA DE LOGIN ===== */
+/* Usada em login.html e registo.html: formulário à esquerda, fotografia à direita. */
+/* Ecrãs isolados, sem navbar nem rodapé: o logótipo e "Voltar ao site" levam à home. */
+.login {
+  display: grid;
+  min-height: 100svh;
+}
+
+.login__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-16);
+}
+
+.login__voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  font-size: var(--fs-14);
+  font-weight: 600;
+  color: var(--color-gray);
+  transition: color var(--transicao);
+}
+
+.login__voltar:hover {
+  color: var(--color-black);
+}
+
+.login__voltar .icone {
+  width: 16px;
+  height: 16px;
+}
+
+.login__painel {
+  display: grid;
+  place-items: center;
+  padding: var(--esp-48) var(--esp-16) var(--esp-64);
+}
+
+.login__conteudo {
+  width: 100%;
+  max-width: 600px;
+  animation: entrar 600ms ease both;
+  animation-delay: calc(var(--intro-atraso, 0ms) + 100ms);
+}
+
+.login__logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}
+
+.login__titulo {
+  margin-block: var(--esp-24) var(--esp-8);
+  font-size: var(--fs-32);
+}
+
+.login__titulo::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 2px;
+  margin-top: var(--esp-16);
+  background: var(--color-gold);
+}
+
+/* A fotografia só aparece em ecrãs largos; em telemóvel fica só o formulário */
+.login__imagem {
+  display: none;
+  border-radius: 0;
+}
+
+.login__imagem img {
+  position: absolute;
+  inset: 0;
+}
+
+.login__texto,
+.login__nota {
+  color: var(--color-gray);
+}
+
+.login__formulario {
+  display: grid;
+  gap: var(--esp-16);
+  margin-block: var(--esp-32) var(--esp-24);
+}
+
+.login__entrar {
+  width: 100%;
+  margin-top: var(--esp-8);
+}
+
+.login__alternativa {
+  margin-bottom: var(--esp-16);
+}
+
+.login__alternativa a {
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--color-gold);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.login__nota {
+  padding-top: var(--esp-16);
+  border-top: 1px solid var(--color-line-light);
+  font-size: var(--fs-14);
+}
+
+/* ===== PERFIL: TOPO ===== */
+.perfil-topo {
+  padding: calc(var(--navbar-altura) + var(--esp-48)) 0 0;
+  color: var(--color-white);
+  background: radial-gradient(ellipse at 20% 0%, #2a2418, var(--color-black) 70%);
+}
+
+.perfil-topo .container > * {
+  animation: entrar 600ms ease both;
+  animation-delay: calc(var(--intro-atraso, 0ms) + 100ms);
+}
+
+.perfil-topo .container > :nth-child(2) {
+  animation-delay: calc(var(--intro-atraso, 0ms) + 240ms);
+}
+
+.perfil-topo__identidade {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-16);
+  text-align: center;
+}
+
+.perfil-topo__nome {
+  font-size: clamp(2rem, 6vw, 3rem);
+}
+
+.perfil-topo__desde {
+  margin-top: 4px;
+  color: var(--color-gray-light);
+}
+
+/* Resumo: cortes feitos, corte mais habitual e última visita */
+.perfil-resumo {
+  margin-top: var(--esp-32);
+  border-top: 1px solid var(--color-line-dark);
+}
+
+.perfil-resumo > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--esp-16);
+  padding-block: var(--esp-16);
+  border-bottom: 1px solid var(--color-line-dark);
+}
+
+.perfil-resumo > div:last-child {
+  border-bottom: 0;
+}
+
+.perfil-resumo dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gray-light);
+}
+
+.perfil-resumo dd {
+  margin: 0;
+  font-family: var(--font-titulo);
+  font-size: var(--fs-18);
+  font-weight: 600;
+  text-align: right;
+}
+
+/* ===== PERFIL: SEPARADORES ===== */
+.perfil {
+  padding-block: var(--esp-32) var(--esp-64);
+}
+
+.separadores {
+  display: flex;
+  gap: var(--esp-32);
+  margin-bottom: var(--esp-32);
+  border-bottom: 1px solid var(--color-line-light);
+}
+
+.separadores__item {
+  position: relative;
+  min-height: 48px;
+  font-size: var(--fs-14);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-gray);
+  transition: color var(--transicao);
+}
+
+.separadores__item::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px;
+  height: 2px;
+  background: var(--color-gold);
+  transform: scaleX(0);
+  transition: transform var(--transicao);
+}
+
+.separadores__item:hover,
+.separadores__item[aria-selected="true"] {
+  color: var(--color-black);
+}
+
+.separadores__item[aria-selected="true"]::after {
+  transform: scaleX(1);
+}
+
+[role="tabpanel"] {
+  animation: entrar 300ms ease;
+}
+
+/* ===== PERFIL: COMPRAS ===== */
+.perfil-compras {
+  display: grid;
+  gap: var(--esp-16);
+}
+
+.perfil-compras > li {
+  animation: entrar 400ms ease both;
+  animation-delay: calc(var(--i) * 50ms);
+}
+
+/* Em ecrãs estreitos, a fotografia fica ao lado do texto */
+.compra-card {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+}
+
+.compra-card:hover {
+  transform: none;
+}
+
+.compra-card .media {
+  height: 100%;
+  aspect-ratio: auto; /* ao lado do texto, a fotografia ocupa a altura do cartão */
+}
+
+.compra-card .produto-card__corpo {
+  min-width: 0;
+}
+
+.compra-card .media__vazio span {
+  display: none;
+}
+
+.compra-card .produto-card__corpo {
+  display: flex;
+  flex-direction: column;
+  padding: var(--esp-16);
+}
+
+.compra-card .produto-card__nome {
+  font-size: var(--fs-18);
+}
+
+.compra-card__acao {
+  align-self: flex-start;
+  min-height: 44px;
+  margin-top: var(--esp-16);
+  padding-inline: var(--esp-16);
+}
+
+.compra-card__acao:disabled {
+  border-color: var(--color-line-light);
+  color: var(--color-gray);
+  cursor: default;
+  background: none;
+}
+
+.compra-card__acao .icone {
+  width: 16px;
+  height: 16px;
+}
+
+/* ===== PERFIL: OS MEUS DADOS ===== */
+.perfil-dados {
+  display: grid;
+  gap: var(--esp-24);
+  max-width: 720px;
+}
+
+.perfil-dados .campo__rotulo {
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gray);
+}
+
+/* Fora do modo de edição, o campo lê-se como texto simples */
+.perfil-dados .campo__controlo[readonly] {
+  min-height: 32px;
+  padding-inline: 0;
+  border-color: transparent;
+  font-size: var(--fs-18);
+  box-shadow: none;
+}
+
+.perfil-dados__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-16) var(--esp-24);
+  padding-top: var(--esp-8);
+}
+
+.perfil-dados__cancelar {
+  color: var(--color-gray);
+}
+
+.perfil__sair {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-8);
+  min-height: 44px;
+  margin-top: var(--esp-48);
+  font-size: var(--fs-14);
+  font-weight: 600;
+  color: var(--color-gray);
+  transition: color var(--transicao);
+}
+
+.perfil__sair:hover {
+  color: var(--color-danger);
+}
+
+@media (min-width: 768px) {
+  .login__painel {
+    padding-inline: var(--esp-48);
+  }
+
+  .login__titulo {
+    font-size: var(--fs-64);
+  }
+
+  .login__texto {
+    font-size: var(--fs-18);
+  }
+
+  .login__formulario .campo__rotulo,
+  .login__alternativa {
+    font-size: var(--fs-16);
+  }
+
+  .login__formulario .campo__controlo {
+    min-height: 56px;
+    font-size: var(--fs-18);
+  }
+
+  .login__formulario .campo__alternar {
+    top: 6px;
+  }
+
+  .login__formulario .caixa {
+    font-size: var(--fs-16);
+  }
+
+  .login__entrar {
+    min-height: 56px;
+    font-size: var(--fs-16);
+  }
+
+  /* Criar conta: campos lado a lado para aproveitar a largura */
+  .login__formulario--duas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--esp-16) var(--esp-24);
+  }
+
+  .login__formulario--duas .campo--largo,
+  .login__formulario--duas .login__entrar {
+    grid-column: 1 / -1;
+  }
+
+  .perfil-topo__identidade {
+    flex-direction: row;
+    gap: var(--esp-24);
+    text-align: left;
+  }
+
+  .perfil-topo__texto {
+    flex: 1;
+  }
+
+  .perfil-resumo {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: var(--esp-48);
+  }
+
+  .perfil-resumo > div {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: var(--esp-8);
+    padding: var(--esp-24) var(--esp-24) var(--esp-32);
+    border-bottom: 0;
+    border-left: 1px solid var(--color-line-dark);
+  }
+
+  .perfil-resumo > div:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .perfil-resumo dd {
+    font-size: var(--fs-24);
+    text-align: left;
+  }
+
+  .perfil {
+    padding-block: var(--esp-48) var(--esp-96);
+  }
+
+  .perfil-compras {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--esp-24);
+  }
+
+  .compra-card {
+    display: block;
+  }
+
+  .compra-card .media {
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  .compra-card .produto-card__corpo {
+    padding: var(--esp-16) var(--esp-24) var(--esp-24);
+  }
+
+  .compra-card__acao {
+    align-self: stretch;
+  }
+
+  .perfil-dados {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .perfil-dados__acoes {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .login {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .login__imagem {
+    display: block;
+  }
+
+  .perfil-compras {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

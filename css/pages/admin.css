@@ -1,0 +1,230 @@
+/* ===== PAINEL DE ADMINISTRAÇÃO ===== */
+/* O topo e os separadores vêm de conta.css; aqui ficam os formulários e as listas. */
+
+/* Formulário de um lado, lista do outro (em ecrãs largos) */
+.admin-painel {
+  display: grid;
+  gap: var(--esp-48);
+}
+
+.admin-painel[hidden] {
+  display: none;
+}
+
+/* ===== FORMULÁRIO ===== */
+.admin-form {
+  display: grid;
+  gap: var(--esp-16);
+  padding: var(--esp-24);
+  border: 1px solid var(--color-line-light);
+  border-radius: var(--raio);
+  background: var(--color-white);
+  box-shadow: var(--sombra);
+  transition: border-color var(--transicao);
+}
+
+/* A alterar um item que já existe */
+.admin-form--edicao {
+  border-color: var(--color-gold);
+}
+
+.admin-form__titulo {
+  font-size: var(--fs-24);
+}
+
+.admin-form__par {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--esp-16);
+}
+
+.admin-form textarea.campo__controlo {
+  min-height: 96px;
+  padding-block: 12px;
+  resize: vertical;
+}
+
+.admin-form__foto {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--esp-16);
+}
+
+.admin-form__foto .media__vazio span,
+.admin-item__foto .media__vazio span {
+  display: none;
+}
+
+.admin-form__ficheiro {
+  max-width: 100%;
+  font: inherit;
+  font-size: var(--fs-14);
+}
+
+.admin-form__sem-foto {
+  min-height: 44px;
+  font-size: var(--fs-14);
+  font-weight: 600;
+  text-decoration: underline;
+  color: var(--color-gray);
+}
+
+.admin-form__sem-foto:hover {
+  color: var(--color-danger);
+}
+
+.admin-form__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-16) var(--esp-24);
+  padding-top: var(--esp-8);
+}
+
+.admin-form__cancelar {
+  color: var(--color-gray);
+}
+
+/* ===== LISTA ===== */
+.admin-lista__titulo {
+  margin-bottom: var(--esp-16);
+  font-size: var(--fs-24);
+}
+
+.admin-lista {
+  display: grid;
+  gap: var(--esp-8);
+}
+
+.admin-lista__vazio {
+  padding: var(--esp-24);
+  border: 1px dashed var(--color-line-light);
+  border-radius: var(--raio);
+  color: var(--color-gray);
+}
+
+.admin-item {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--esp-16);
+  padding: var(--esp-8);
+  border: 1px solid var(--color-line-light);
+  border-radius: var(--raio);
+  background: var(--color-white);
+}
+
+.admin-item__nome {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.admin-item__detalhe {
+  font-size: var(--fs-14);
+  color: var(--color-gray);
+}
+
+.admin-item__acoes {
+  display: flex;
+  gap: 4px;
+}
+
+.admin-item__botao {
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding-inline: var(--esp-8);
+  border-radius: var(--raio);
+  font-size: var(--fs-14);
+  font-weight: 600;
+  color: var(--color-gray);
+  transition: color var(--transicao), background var(--transicao);
+}
+
+.admin-item__botao .icone {
+  width: 20px;
+  height: 20px;
+}
+
+.admin-item__botao:hover {
+  color: var(--color-black);
+  background: var(--color-line-light);
+}
+
+.admin-item__botao--eliminar:hover,
+.admin-item__botao[data-confirmar] {
+  color: var(--color-white);
+  background: var(--color-danger);
+}
+
+/* Galeria: cartões com a fotografia grande em vez de linhas */
+.admin-lista--grelha {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--esp-16);
+}
+
+.admin-lista--grelha .admin-lista__vazio {
+  grid-column: 1 / -1;
+}
+
+.admin-lista--grelha .admin-item {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--esp-8);
+}
+
+.admin-lista--grelha .admin-item__foto {
+  grid-column: 1 / -1;
+  aspect-ratio: 4 / 5;
+}
+
+.admin-lista--grelha .admin-item__detalhe {
+  display: none;
+}
+
+/* ===== RODAPÉ DO PAINEL ===== */
+.admin-rodape {
+  margin-top: var(--esp-64);
+  padding-top: var(--esp-24);
+  border-top: 1px solid var(--color-line-light);
+  color: var(--color-gray);
+}
+
+.admin-rodape__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-16) var(--esp-32);
+  margin-top: var(--esp-16);
+}
+
+.admin-rodape .perfil__sair {
+  margin-top: 0;
+}
+
+@media (min-width: 768px) {
+  .admin-lista--grelha {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .admin-painel {
+    grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  /* O formulário acompanha o scroll da lista */
+  .admin-form {
+    position: sticky;
+    top: calc(var(--navbar-altura) + var(--esp-24));
+    max-height: calc(100vh - var(--navbar-altura) - var(--esp-48));
+    overflow-y: auto;
+  }
+}
+
+/* Os campos lado a lado encolhem em vez de sair do cartão */
+.admin-form__par > * {
+  min-width: 0;
+}

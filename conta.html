@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O meu perfil · Salgueiro's Barbearia</title>
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="icon" href="assets/images/logo/logo-salgueiros.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/pages/conta.css">
+  <script src="js/dados.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/conta.js" defer></script>
+</head>
+<body data-pagina="conta">
+
+  <!-- Navbar, menu mobile e rodapé são montados por js/main.js; o conteúdo do perfil por js/conta.js -->
+
+  <main>
+
+    <!-- ===== TOPO: QUEM É O CLIENTE E O RESUMO NA BARBEARIA ===== -->
+    <section class="perfil-topo">
+      <div class="container">
+        <div class="perfil-topo__identidade">
+          <span class="avatar avatar--grande" id="perfil-avatar" aria-hidden="true"></span>
+          <div class="perfil-topo__texto">
+            <h1 class="perfil-topo__nome" id="perfil-nome"></h1>
+            <p class="perfil-topo__desde" id="perfil-desde"></p>
+          </div>
+          <a class="btn btn--primario" data-link="marcacoes" href="#">Marcar próximo corte</a>
+        </div>
+        <dl class="perfil-resumo" id="perfil-resumo"></dl>
+      </div>
+    </section>
+
+    <section class="perfil">
+      <div class="container">
+
+        <div class="separadores" role="tablist" aria-label="Secções do perfil">
+          <button class="separadores__item" type="button" role="tab" id="sep-compras" aria-controls="painel-compras" aria-selected="true">Compras</button>
+          <button class="separadores__item" type="button" role="tab" id="sep-dados" aria-controls="painel-dados" aria-selected="false" tabindex="-1">Os meus dados</button>
+        </div>
+
+        <!-- ===== COMPRAS ===== -->
+        <div role="tabpanel" id="painel-compras" aria-labelledby="sep-compras">
+          <ul class="perfil-compras" id="perfil-compras"></ul>
+        </div>
+
+        <!-- ===== OS MEUS DADOS ===== -->
+        <div role="tabpanel" id="painel-dados" aria-labelledby="sep-dados" hidden>
+          <form class="perfil-dados" id="perfil-form" novalidate>
+            <div class="campo campo--bloco">
+              <label class="campo__rotulo" for="dado-nome">Nome</label>
+              <input class="campo__controlo" type="text" id="dado-nome" name="nome" autocomplete="name" required minlength="2" readonly aria-describedby="dado-nome-erro">
+              <p class="campo__erro" id="dado-nome-erro" aria-live="polite"></p>
+            </div>
+            <div class="campo campo--bloco">
+              <label class="campo__rotulo" for="dado-email">Email</label>
+              <input class="campo__controlo" type="email" id="dado-email" name="email" autocomplete="email" required readonly aria-describedby="dado-email-erro">
+              <p class="campo__erro" id="dado-email-erro" aria-live="polite"></p>
+            </div>
+            <div class="campo campo--bloco">
+              <label class="campo__rotulo" for="dado-telemovel">Telemóvel</label>
+              <input class="campo__controlo" type="tel" id="dado-telemovel" name="telemovel" autocomplete="tel" required pattern="\+?[0-9 ]{9,17}" readonly aria-describedby="dado-telemovel-erro">
+              <p class="campo__erro" id="dado-telemovel-erro" aria-live="polite"></p>
+            </div>
+
+            <div class="perfil-dados__acoes">
+              <button class="btn btn--contorno" type="button" id="dados-editar">Editar dados</button>
+              <button class="btn btn--primario" type="submit" id="dados-guardar" hidden>Guardar alterações</button>
+              <button class="btn btn--texto perfil-dados__cancelar" type="button" id="dados-cancelar" hidden>Cancelar</button>
+            </div>
+          </form>
+
+          <button class="perfil__sair" type="button" id="perfil-sair">
+            <svg class="icone" aria-hidden="true"><use href="#i-sair"></use></svg>Terminar sessão
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>

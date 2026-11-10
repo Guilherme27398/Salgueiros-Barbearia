@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Criar conta · Salgueiro's Barbearia</title>
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="icon" href="assets/images/logo/logo-salgueiros.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/pages/conta.css">
+  <script src="js/dados.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/auth.js" defer></script>
+</head>
+<body data-pagina="registo">
+
+  <!-- Ecrã isolado: sem navbar nem rodapé (ver ECRA_ISOLADO em js/main.js) -->
+
+  <main class="login">
+
+    <!-- ===== FORMULÁRIO ===== -->
+    <div class="login__painel">
+      <div class="login__conteudo">
+        <div class="login__topo">
+          <a href="index.html" aria-label="Salgueiro's Barbearia, voltar ao início">
+            <img class="login__logo" src="assets/images/logo/logo-salgueiros.png" alt="" width="64" height="64">
+          </a>
+          <a class="login__voltar" href="index.html"><svg class="icone" aria-hidden="true"><use href="#i-seta-esquerda"></use></svg>Voltar ao site</a>
+        </div>
+        <h1 class="login__titulo">Criar conta</h1>
+        <p class="login__texto">Guarde o seu histórico de cortes e de compras.</p>
+
+        <form class="login__formulario login__formulario--duas" id="registo-form" novalidate>
+          <div class="campo campo--bloco">
+            <label class="campo__rotulo" for="nome">Nome</label>
+            <input class="campo__controlo" type="text" id="nome" name="nome" autocomplete="name" required minlength="2" aria-describedby="nome-erro">
+            <p class="campo__erro" id="nome-erro" aria-live="polite"></p>
+          </div>
+
+          <div class="campo campo--bloco">
+            <label class="campo__rotulo" for="telemovel">Telemóvel</label>
+            <input class="campo__controlo" type="tel" id="telemovel" name="telemovel" autocomplete="tel" placeholder="+351 910 000 000" required pattern="\+?[0-9 ]{9,17}" aria-describedby="telemovel-erro">
+            <p class="campo__erro" id="telemovel-erro" aria-live="polite"></p>
+          </div>
+
+          <div class="campo campo--bloco">
+            <label class="campo__rotulo" for="email">Email</label>
+            <input class="campo__controlo" type="email" id="email" name="email" autocomplete="email" required aria-describedby="email-erro">
+            <p class="campo__erro" id="email-erro" aria-live="polite"></p>
+          </div>
+
+          <div class="campo campo--bloco">
+            <label class="campo__rotulo" for="email-confirmar">Confirmar email</label>
+            <input class="campo__controlo" type="email" id="email-confirmar" name="email-confirmar" autocomplete="off" required data-igual-a="email" aria-describedby="email-confirmar-erro">
+            <p class="campo__erro" id="email-confirmar-erro" aria-live="polite"></p>
+          </div>
+
+          <div class="campo campo--bloco campo--largo">
+            <label class="campo__rotulo" for="palavra-passe">Palavra-passe</label>
+            <div class="campo__grupo">
+              <input class="campo__controlo" type="password" id="palavra-passe" name="palavra-passe-nova" autocomplete="new-password" required minlength="8" aria-describedby="palavra-passe-ajuda palavra-passe-erro">
+              <button class="campo__alternar" type="button" aria-pressed="false" aria-controls="palavra-passe">Mostrar</button>
+            </div>
+            <p class="campo__ajuda" id="palavra-passe-ajuda">Pelo menos 8 caracteres.</p>
+            <p class="campo__erro" id="palavra-passe-erro" aria-live="polite"></p>
+          </div>
+
+          <div class="campo campo--bloco campo--largo">
+            <label class="caixa" for="termos">
+              <input class="campo__caixa" type="checkbox" id="termos" name="termos" required aria-describedby="termos-erro">
+              <span>Aceito os <a href="#">Termos de Utilização</a> e a <a href="#">Política de Privacidade</a>.</span>
+            </label>
+            <p class="campo__erro" id="termos-erro" aria-live="polite"></p>
+          </div>
+
+          <button class="btn btn--primario login__entrar" type="submit">Criar conta</button>
+        </form>
+
+        <p class="login__alternativa">Já tem conta? <a href="login.html">Iniciar sessão</a></p>
+        <p class="login__nota">Protótipo de demonstração: a conta não é criada de verdade e o histórico mostrado no perfil é de exemplo.</p>
+      </div>
+    </div>
+
+    <!-- ===== FOTOGRAFIA (visível em ecrãs largos) ===== -->
+    <div class="login__imagem media" data-imagem="login" data-alt="" data-label="Fotografia para o login · vertical (4:5)"></div>
+
+  </main>
+
+</body>
+</html>

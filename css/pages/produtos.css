@@ -1,0 +1,86 @@
+/* ===== PÁGINA DE PRODUTOS ===== */
+.produtos {
+  padding-block: var(--esp-32) var(--esp-64);
+}
+
+.produtos__barra {
+  display: grid;
+  gap: var(--esp-16);
+  padding-bottom: var(--esp-24);
+  border-bottom: 1px solid var(--color-line-light);
+}
+
+.produtos__contagem {
+  margin-block: var(--esp-24) var(--esp-16);
+  font-size: var(--fs-14);
+  color: var(--color-gray);
+}
+
+.produtos__grelha {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--esp-16);
+}
+
+/* Cada cartão entra com um pequeno atraso em relação ao anterior */
+.produtos__grelha > li {
+  animation: entrar 400ms ease both;
+  animation-delay: calc(var(--i) * 40ms);
+}
+
+.produtos__vazio {
+  padding-block: var(--esp-64);
+  text-align: center;
+}
+
+.produtos__vazio h2 {
+  font-size: var(--fs-32);
+}
+
+.produtos__vazio p {
+  margin-block: var(--esp-8) var(--esp-24);
+  color: var(--color-gray);
+}
+
+/* Em ecrãs estreitos, o cartão fica mais compacto para caberem dois por linha */
+@media (max-width: 767px) {
+  .produtos .produto-card__corpo {
+    padding: var(--esp-16);
+  }
+
+  .produtos .produto-card__nome {
+    font-size: var(--fs-18);
+  }
+
+  .produtos .produto-card__estado {
+    top: var(--esp-8);
+    left: var(--esp-8);
+  }
+
+  .produtos .media__vazio span {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .produtos {
+    padding-block: var(--esp-48) var(--esp-96);
+  }
+
+  .produtos__barra {
+    grid-template-columns: minmax(220px, 320px) 1fr auto;
+    align-items: center;
+    gap: var(--esp-24);
+  }
+
+  .produtos__grelha {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--esp-24);
+  }
+}
+
+@media (min-width: 1024px) {
+  .produtos__grelha {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

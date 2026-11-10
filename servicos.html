@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Serviços · Salgueiro's Barbearia</title>
+  <meta name="description" content="Todos os serviços e preços da Salgueiro's Barbearia: cortes, barba, sobrancelha e limpeza de pele.">
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="icon" href="assets/images/logo/logo-salgueiros.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <script src="js/dados.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/servicos.js" defer></script>
+</head>
+<body data-pagina="servicos">
+
+  <!-- Navbar, menu mobile e rodapé são montados por js/main.js; os serviços por js/servicos.js -->
+
+  <main>
+
+    <!-- ===== CABEÇALHO DA PÁGINA ===== -->
+    <section class="pagina-cabecalho">
+      <div class="container">
+        <nav aria-label="Caminho">
+          <ol class="migalhas">
+            <li><a href="index.html">Início</a></li>
+            <li aria-current="page">Serviços</li>
+          </ol>
+        </nav>
+        <h1 class="pagina-cabecalho__titulo">Serviços</h1>
+        <p class="pagina-cabecalho__texto">Tudo o que fazemos na barbearia, com a duração e o preço de cada serviço.</p>
+      </div>
+    </section>
+
+    <!-- ===== TODOS OS SERVIÇOS ===== -->
+    <section class="secao secao--preta servicos-pagina" aria-label="Lista de serviços">
+      <div class="container">
+        <article class="assinatura" id="servico-assinatura"></article>
+        <ul class="servicos__grelha" id="servicos-lista"></ul>
+        <p class="servicos-pagina__nota">Preços sujeitos a alteração. Pagamento na barbearia.</p>
+        <p class="secao__acao"><a class="btn btn--primario" data-link="marcacoes" href="#">Marcar agora</a></p>
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>

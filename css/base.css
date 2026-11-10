@@ -1,0 +1,247 @@
+/* ===== TOKENS ===== */
+:root {
+  --color-black: #0d0d0d;
+  --color-black-soft: #1a1a1a;
+  --color-gold: #c9a24a;
+  --color-gold-hover: #b8913a;
+  --color-gold-soft: #e9d9ae;
+  --color-white: #ffffff;
+  --color-gray: #5c5c5c;
+  --color-gray-light: #b5b5b5;
+  --color-line-dark: rgba(201, 162, 74, 0.28);
+  --color-line-light: rgba(13, 13, 13, 0.12);
+  --color-danger: #b42318;
+  --color-success: #2e7d4f;
+
+  --font-titulo: "Playfair Display", Georgia, serif;
+  --font-texto: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --fs-14: 0.875rem;
+  --fs-16: 1rem;
+  --fs-18: 1.125rem;
+  --fs-24: 1.5rem;
+  --fs-32: 2rem;
+  --fs-48: 3rem;
+  --fs-64: 4rem;
+
+  --esp-8: 8px;
+  --esp-16: 16px;
+  --esp-24: 24px;
+  --esp-32: 32px;
+  --esp-48: 48px;
+  --esp-64: 64px;
+  --esp-96: 96px;
+
+  --largura-max: 1200px;
+  --navbar-altura: 72px;
+  --raio: 4px;
+  --sombra: 0 8px 24px rgba(13, 13, 13, 0.1);
+  --transicao: 200ms ease;
+}
+
+/* ===== RESET ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--navbar-altura);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-texto);
+  font-size: var(--fs-16);
+  line-height: 1.5;
+  color: var(--color-black);
+  background: var(--color-white);
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-titulo);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+address {
+  font-style: normal;
+}
+
+[hidden] {
+  display: none !important; /* o atributo hidden tem de ganhar a qualquer display definido numa classe */
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+/* ===== UTILITÁRIOS ===== */
+.container {
+  width: 100%;
+  max-width: calc(var(--largura-max) + 2 * var(--esp-16));
+  margin-inline: auto;
+  padding-inline: var(--esp-16);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.icone {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ===== SECÇÕES ===== */
+.secao {
+  padding-block: var(--esp-48);
+}
+
+.secao--preta {
+  color: var(--color-white);
+  background: var(--color-black);
+}
+
+.secao__cabecalho {
+  max-width: 640px;
+  margin: 0 auto var(--esp-48);
+  text-align: center;
+}
+
+.secao__sobretitulo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--esp-16);
+  margin-bottom: var(--esp-16);
+  font-size: var(--fs-14);
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-gray);
+}
+
+.secao__sobretitulo::before,
+.secao__sobretitulo::after {
+  content: "";
+  width: 32px;
+  height: 1px;
+  background: var(--color-gold);
+}
+
+.secao--preta .secao__sobretitulo {
+  color: var(--color-gold);
+}
+
+.secao__titulo {
+  font-size: var(--fs-32);
+}
+
+.secao__texto {
+  margin-top: var(--esp-16);
+  color: var(--color-gray);
+}
+
+.secao--preta .secao__texto {
+  color: var(--color-gray-light);
+}
+
+.secao__acao {
+  margin-top: var(--esp-48);
+  text-align: center;
+}
+
+/* ===== ANIMAÇÃO DE ENTRADA ===== */
+.revelar {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.revelar--visivel {
+  opacity: 1;
+  transform: none;
+}
+
+@media (min-width: 768px) {
+  .secao {
+    padding-block: var(--esp-96);
+  }
+
+  .secao__titulo {
+    font-size: var(--fs-48);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important; /* preferência do utilizador prevalece sobre qualquer animação */
+    transition-duration: 0.01ms !important;
+  }
+}

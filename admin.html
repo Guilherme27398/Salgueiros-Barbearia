@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel de administração · Salgueiro's Barbearia</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="icon" href="assets/images/logo/logo-salgueiros.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/pages/conta.css">
+  <link rel="stylesheet" href="css/pages/admin.css">
+  <script src="js/dados.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/admin.js" defer></script>
+</head>
+<body data-pagina="admin">
+
+  <!-- Navbar, menu mobile e rodapé são montados por js/main.js; as listas e os formulários por js/admin.js -->
+
+  <main>
+
+    <!-- ===== TOPO: QUEM TEM SESSÃO E O QUE EXISTE NO SITE ===== -->
+    <section class="perfil-topo">
+      <div class="container">
+        <div class="perfil-topo__identidade">
+          <span class="avatar avatar--grande" aria-hidden="true">AD</span>
+          <div class="perfil-topo__texto">
+            <h1 class="perfil-topo__nome">Painel de administração</h1>
+            <p class="perfil-topo__desde" id="admin-conta"></p>
+          </div>
+          <a class="btn btn--secundario" href="index.html">Ver o site</a>
+        </div>
+        <dl class="perfil-resumo" id="admin-resumo"></dl>
+      </div>
+    </section>
+
+    <section class="perfil">
+      <div class="container">
+
+        <div class="separadores" role="tablist" aria-label="Secções do painel">
+          <button class="separadores__item" type="button" role="tab" id="sep-servicos" aria-controls="painel-servicos" aria-selected="true">Serviços</button>
+          <button class="separadores__item" type="button" role="tab" id="sep-produtos" aria-controls="painel-produtos" aria-selected="false" tabindex="-1">Produtos</button>
+          <button class="separadores__item" type="button" role="tab" id="sep-cortes" aria-controls="painel-cortes" aria-selected="false" tabindex="-1">Galeria</button>
+        </div>
+
+        <!-- ===== SERVIÇOS ===== -->
+        <div class="admin-painel" role="tabpanel" id="painel-servicos" aria-labelledby="sep-servicos">
+          <form class="admin-form" id="form-servicos" novalidate>
+            <h2 class="admin-form__titulo" data-titulo>Novo serviço</h2>
+            <div class="campo campo--bloco">
+              <label class="campo__rotulo" for="servico-nome">Nome do serviço</label>
+              <input class="campo__controlo" type="text" id="servico-nome" name="nome" required maxlength="60" aria-describedby="servico-nome-erro">
+              <p class="campo__erro" id="servico-nome-erro" aria-live="polite"></p>
+            </div>
+            <div class="campo campo--bloco">
+              <label class="campo__rotulo" for="servico-descricao">Descrição</label>
+              <textarea class="campo__controlo" id="servico-descricao" name="descricao" rows="3" required maxlength="200" aria-describedby="servico-descricao-erro"></textarea>
+              <p class="campo__erro" id="servico-descricao-erro" aria-live="polite"></p>
+            </div>
+            <div class="admin-form__par">
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="servico-preco">Preço (€)</label>
+                <input class="campo__controlo" type="number" id="servico-preco" name="preco" required min="0.01" step="0.01" inputmode="decimal" aria-describedby="servico-preco-erro">
+                <p class="campo__erro" id="servico-preco-erro" aria-live="polite"></p>
+              </div>
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="servico-duracao">Tempo estimado (min)</label>
+                <input class="campo__controlo" type="number" id="servico-duracao" name="duracao" required min="1" step="1" inputmode="numeric" aria-describedby="servico-duracao-erro">
+                <p class="campo__erro" id="servico-duracao-erro" aria-live="polite"></p>
+              </div>
+            </div>
+            <div class="campo campo--bloco">
+              <label class="campo__rotulo" for="servico-imagem">Fotografia <span class="campo__ajuda">(opcional)</span></label>
+              <div class="admin-form__foto">
+                <span class="media media--1x1" data-previa></span>
+                <div>
+                  <input class="admin-form__ficheiro" type="file" id="servico-imagem" name="imagem" accept="image/*" aria-describedby="servico-imagem-erro">
+                  <button class="admin-form__sem-foto" type="button" data-sem-foto hidden>Remover fotografia</button>
+                </div>
+              </div>
+              <p class="campo__erro" id="servico-imagem-erro" aria-live="polite"></p>
+            </div>
+            <label class="caixa" for="servico-home">
+              <input class="campo__caixa" type="checkbox" id="servico-home" name="home" checked>
+              <span>Mostrar também na página inicial</span>
+            </label>
+            <div class="admin-form__acoes">
+              <button class="btn btn--primario" type="submit" data-submeter>Adicionar serviço</button>
+              <button class="btn btn--texto admin-form__cancelar" type="button" data-cancelar hidden>Cancelar</button>
+            </div>
+          </form>
+
+          <div>
+            <h2 class="admin-lista__titulo">Serviços no site</h2>
+            <ul class="admin-lista" id="lista-servicos"></ul>
+          </div>
+        </div>
+
+        <!-- ===== PRODUTOS ===== -->
+        <div class="admin-painel" role="tabpanel" id="painel-produtos" aria-labelledby="sep-produtos" hidden>
+          <form class="admin-form" id="form-produtos" novalidate>
+            <h2 class="admin-form__titulo" data-titulo>Novo produto</h2>
+            <div class="campo campo--bloco">
+              <label class="campo__rotulo" for="produto-nome">Nome do produto</label>
+              <input class="campo__controlo" type="text" id="produto-nome" name="nome" required maxlength="60" aria-describedby="produto-nome-erro">
+              <p class="campo__erro" id="produto-nome-erro" aria-live="polite"></p>
+            </div>
+            <div class="campo campo--bloco">
+              <label class="campo__rotulo" for="produto-categoria">Categoria</label>
+              <select class="campo__controlo" id="produto-categoria" name="categoria" aria-describedby="produto-categoria-erro"></select>
+              <p class="campo__erro" id="produto-categoria-erro" aria-live="polite"></p>
+            </div>
+            <div class="admin-form__par">
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="produto-preco">Preço (€)</label>
+                <input class="campo__controlo" type="number" id="produto-preco" name="preco" required min="0.01" step="0.01" inputmode="decimal" aria-describedby="produto-preco-erro">
+                <p class="campo__erro" id="produto-preco-erro" aria-live="polite"></p>
+              </div>
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="produto-stock">Quantidade em stock</label>
+                <input class="campo__controlo" type="number" id="produto-stock" name="stock" required min="0" step="1" inputmode="numeric" aria-describedby="produto-stock-erro">
+                <p class="campo__erro" id="produto-stock-erro" aria-live="polite"></p>
+              </div>
+            </div>
+            <div class="campo campo--bloco">
+              <label class="campo__rotulo" for="produto-imagem">Fotografia <span class="campo__ajuda">(opcional)</span></label>
+              <div class="admin-form__foto">
+                <span class="media media--1x1" data-previa></span>
+                <div>
+                  <input class="admin-form__ficheiro" type="file" id="produto-imagem" name="imagem" accept="image/*" aria-describedby="produto-imagem-erro">
+                  <button class="admin-form__sem-foto" type="button" data-sem-foto hidden>Remover fotografia</button>
+                </div>
+              </div>
+              <p class="campo__erro" id="produto-imagem-erro" aria-live="polite"></p>
+            </div>
+            <label class="caixa" for="produto-destaque">
+              <input class="campo__caixa" type="checkbox" id="produto-destaque" name="destaque">
+              <span>Mostrar no carrossel de destaques da página inicial</span>
+            </label>
+            <div class="admin-form__acoes">
+              <button class="btn btn--primario" type="submit" data-submeter>Adicionar produto</button>
+              <button class="btn btn--texto admin-form__cancelar" type="button" data-cancelar hidden>Cancelar</button>
+            </div>
+          </form>
+
+          <div>
+            <h2 class="admin-lista__titulo">Produtos no site</h2>
+            <ul class="admin-lista" id="lista-produtos"></ul>
+          </div>
+        </div>
+
+        <!-- ===== GALERIA ===== -->
+        <div class="admin-painel" role="tabpanel" id="painel-cortes" aria-labelledby="sep-cortes" hidden>
+          <form class="admin-form" id="form-cortes" novalidate>
+            <h2 class="admin-form__titulo" data-titulo>Nova fotografia</h2>
+            <div class="campo campo--bloco">
+              <label class="campo__rotulo" for="corte-legenda">Nome do corte</label>
+              <input class="campo__controlo" type="text" id="corte-legenda" name="legenda" required maxlength="40" aria-describedby="corte-legenda-erro">
+              <p class="campo__erro" id="corte-legenda-erro" aria-live="polite"></p>
+            </div>
+            <div class="campo campo--bloco">
+              <label class="campo__rotulo" for="corte-imagem">Fotografia <span class="campo__ajuda">(ao alto fica melhor)</span></label>
+              <div class="admin-form__foto">
+                <span class="media media--4x5" data-previa></span>
+                <div>
+                  <input class="admin-form__ficheiro" type="file" id="corte-imagem" name="imagem" accept="image/*" required aria-describedby="corte-imagem-erro">
+                  <button class="admin-form__sem-foto" type="button" data-sem-foto hidden>Remover fotografia</button>
+                </div>
+              </div>
+              <p class="campo__erro" id="corte-imagem-erro" aria-live="polite"></p>
+            </div>
+            <div class="admin-form__acoes">
+              <button class="btn btn--primario" type="submit" data-submeter>Adicionar à galeria</button>
+              <button class="btn btn--texto admin-form__cancelar" type="button" data-cancelar hidden>Cancelar</button>
+            </div>
+          </form>
+
+          <div>
+            <h2 class="admin-lista__titulo">Fotografias no carrossel da galeria</h2>
+            <ul class="admin-lista admin-lista--grelha" id="lista-cortes"></ul>
+          </div>
+        </div>
+
+        <!-- ===== PROTÓTIPO: ONDE FICAM AS ALTERAÇÕES ===== -->
+        <div class="admin-rodape">
+          <p>Protótipo: tudo o que criar, alterar ou eliminar fica guardado apenas neste navegador e aparece no site para quem o abrir aqui.</p>
+          <div class="admin-rodape__acoes">
+            <button class="btn btn--contorno" type="button" id="admin-repor">Repor dados de exemplo</button>
+            <button class="perfil__sair" type="button" id="admin-sair">
+              <svg class="icone" aria-hidden="true"><use href="#i-sair"></use></svg>Terminar sessão
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>

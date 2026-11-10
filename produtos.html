@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Produtos · Salgueiro's Barbearia</title>
+  <meta name="description" content="Produtos para cabelo, barba e moda da Salgueiro's Barbearia.">
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="icon" href="assets/images/logo/logo-salgueiros.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/pages/produtos.css">
+  <script src="js/dados.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/produtos.js" defer></script>
+</head>
+<body data-pagina="produtos">
+
+  <!-- Navbar, menu mobile e rodapé são montados por js/main.js -->
+
+  <main>
+
+    <!-- ===== CABEÇALHO DA PÁGINA ===== -->
+    <section class="pagina-cabecalho">
+      <div class="container">
+        <nav aria-label="Caminho">
+          <ol class="migalhas">
+            <li><a href="index.html">Início</a></li>
+            <li aria-current="page">Produtos</li>
+          </ol>
+        </nav>
+        <h1 class="pagina-cabecalho__titulo">Produtos</h1>
+        <p class="pagina-cabecalho__texto">O que o barbeiro usa e recomenda, para o cabelo, para a barba e para vestir. Disponível na barbearia.</p>
+      </div>
+    </section>
+
+    <!-- ===== CATÁLOGO ===== -->
+    <section class="produtos" aria-label="Catálogo de produtos">
+      <div class="container">
+
+        <form class="produtos__barra" id="produtos-filtros" role="search">
+          <div class="campo campo--pesquisa">
+            <label class="sr-only" for="pesquisa">Pesquisar produtos</label>
+            <svg class="icone" aria-hidden="true"><use href="#i-pesquisa"></use></svg>
+            <input class="campo__controlo" type="search" id="pesquisa" placeholder="Pesquisar produtos" autocomplete="off">
+          </div>
+          <div class="chips" id="categorias" role="group" aria-label="Filtrar por categoria"></div>
+          <div class="campo campo--ordem">
+            <label class="campo__rotulo" for="ordem">Ordenar por</label>
+            <select class="campo__controlo" id="ordem">
+              <option value="nome-asc">Nome (A–Z)</option>
+              <option value="nome-desc">Nome (Z–A)</option>
+              <option value="preco-asc">Preço (mais baixo)</option>
+              <option value="preco-desc">Preço (mais alto)</option>
+            </select>
+          </div>
+        </form>
+
+        <p class="produtos__contagem" id="produtos-contagem" aria-live="polite"></p>
+
+        <ul class="produtos__grelha" id="produtos-grelha"></ul>
+
+        <div class="produtos__vazio" id="produtos-vazio" hidden>
+          <h2>Nenhum produto encontrado</h2>
+          <p>Experimente outra pesquisa ou outra categoria.</p>
+          <button class="btn btn--contorno" type="button" data-limpar>Limpar filtros</button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>

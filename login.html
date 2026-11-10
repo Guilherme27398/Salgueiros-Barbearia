@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Iniciar sessão · Salgueiro's Barbearia</title>
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="icon" href="assets/images/logo/logo-salgueiros.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/pages/conta.css">
+  <script src="js/dados.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/auth.js" defer></script>
+</head>
+<body data-pagina="login">
+
+  <!-- Ecrã isolado: sem navbar nem rodapé (ver ECRA_ISOLADO em js/main.js) -->
+
+  <main class="login">
+
+    <!-- ===== FORMULÁRIO ===== -->
+    <div class="login__painel">
+      <div class="login__conteudo">
+        <div class="login__topo">
+          <a href="index.html" aria-label="Salgueiro's Barbearia, voltar ao início">
+            <img class="login__logo" src="assets/images/logo/logo-salgueiros.png" alt="" width="64" height="64">
+          </a>
+          <a class="login__voltar" href="index.html"><svg class="icone" aria-hidden="true"><use href="#i-seta-esquerda"></use></svg>Voltar ao site</a>
+        </div>
+        <h1 class="login__titulo">Iniciar sessão</h1>
+        <p class="login__texto">Bem-vindo de volta. Entre para ver o seu perfil e as suas compras.</p>
+
+        <form class="login__formulario" id="login-form" novalidate>
+          <div class="campo campo--bloco">
+            <label class="campo__rotulo" for="email">Email</label>
+            <input class="campo__controlo" type="email" id="email" name="email" autocomplete="email" required aria-describedby="email-erro">
+            <p class="campo__erro" id="email-erro" aria-live="polite"></p>
+          </div>
+
+          <div class="campo campo--bloco">
+            <label class="campo__rotulo" for="palavra-passe">Palavra-passe</label>
+            <div class="campo__grupo">
+              <input class="campo__controlo" type="password" id="palavra-passe" name="palavra-passe" autocomplete="current-password" required aria-describedby="palavra-passe-erro">
+              <button class="campo__alternar" type="button" aria-pressed="false" aria-controls="palavra-passe">Mostrar</button>
+            </div>
+            <p class="campo__erro" id="palavra-passe-erro" aria-live="polite"></p>
+          </div>
+
+          <button class="btn btn--primario login__entrar" type="submit">Entrar</button>
+        </form>
+
+        <p class="login__alternativa">Ainda não tem conta? <a href="registo.html">Criar conta</a></p>
+        <p class="login__nota">Protótipo de demonstração: qualquer email e palavra-passe dão acesso ao perfil de exemplo. Para o painel de administração, use <strong>admin@gmail.com</strong> e a palavra-passe <strong>123</strong>.</p>
+      </div>
+    </div>
+
+    <!-- ===== FOTOGRAFIA (visível em ecrãs largos) ===== -->
+    <div class="login__imagem media" data-imagem="login" data-alt="" data-label="Fotografia para o login · vertical (4:5)"></div>
+
+  </main>
+
+</body>
+</html>
