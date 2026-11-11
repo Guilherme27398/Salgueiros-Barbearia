@@ -1,31 +1,63 @@
 /* ===== PAINEL DE ADMINISTRAÇÃO ===== */
 /* O topo e os separadores vêm de conta.css; aqui ficam os formulários e as listas. */
 
-/* Formulário de um lado, lista do outro (em ecrãs largos) */
-.admin-painel {
-  display: grid;
-  gap: var(--esp-48);
+/* Título da lista à esquerda e botão "Adicionar" à direita */
+.admin-painel__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-16);
+  margin-bottom: var(--esp-24);
 }
 
-.admin-painel[hidden] {
-  display: none;
+.admin-painel__topo .admin-lista__titulo {
+  margin-bottom: 0;
 }
 
-/* ===== FORMULÁRIO ===== */
+/* ===== FORMULÁRIO (em janela) ===== */
+/* Aberta pelo botão "Adicionar" de cada separador ou pelo lápis de um item (ver admin.js). */
+.admin-janela {
+  width: min(calc(100% - 2 * var(--esp-16)), 520px);
+  max-width: none;
+  max-height: calc(100dvh - 2 * var(--esp-16));
+  padding: 0;
+  border: 0;
+  border-radius: var(--raio);
+  color: var(--color-black);
+  background: var(--color-white);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+}
+
+.admin-janela[open] {
+  animation: entrar 240ms ease;
+}
+
+.admin-janela::backdrop {
+  background: rgba(13, 13, 13, 0.7);
+}
+
 .admin-form {
   display: grid;
   gap: var(--esp-16);
   padding: var(--esp-24);
-  border: 1px solid var(--color-line-light);
-  border-radius: var(--raio);
-  background: var(--color-white);
-  box-shadow: var(--sombra);
-  transition: border-color var(--transicao);
 }
 
-/* A alterar um item que já existe */
-.admin-form--edicao {
-  border-color: var(--color-gold);
+.admin-form__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-16);
+}
+
+/* O botão de fecho usa o ícone da navbar, aqui sobre fundo branco */
+.admin-form__topo .navbar__icone {
+  margin-right: calc(var(--esp-8) * -1);
+}
+
+.admin-form__topo .navbar__icone:hover {
+  color: var(--color-black);
+  background: var(--color-gold-soft);
 }
 
 .admin-form__titulo {
@@ -35,6 +67,7 @@
 .admin-form__par {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start; /* uma ajuda por baixo de um campo não desalinha o do lado */
   gap: var(--esp-16);
 }
 
@@ -84,6 +117,37 @@
 
 .admin-form__cancelar {
   color: var(--color-gray);
+}
+
+/* Tamanhos do produto: nome, stock e botão de remover em cada linha */
+.admin-tamanhos {
+  display: grid;
+  gap: var(--esp-8);
+}
+
+.admin-tamanhos:empty {
+  display: none;
+}
+
+.admin-tamanhos__linha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px auto;
+  align-items: center;
+  gap: var(--esp-8);
+}
+
+.admin-tamanhos__novo {
+  justify-self: start;
+  min-height: 44px;
+  font-size: var(--fs-14);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* Stock total calculado a partir dos tamanhos: não se escreve à mão */
+.admin-form .campo__controlo[readonly] {
+  color: var(--color-gray);
+  background: var(--color-line-light);
 }
 
 /* ===== LISTA ===== */
@@ -183,6 +247,83 @@
   display: none;
 }
 
+/* ===== SEPARADORES E ENCOMENDAS ===== */
+/* Com quatro separadores, em ecrãs estreitos passam para uma segunda linha */
+.separadores {
+  flex-wrap: wrap;
+  column-gap: var(--esp-24);
+}
+
+.admin-encomendas__texto {
+  max-width: 640px;
+  margin-bottom: var(--esp-24);
+  color: var(--color-gray);
+}
+
+/* O cartão (.encomenda) é o mesmo das compras do perfil e está em conta.css; aqui fica o que é só do painel. */
+.encomendas {
+  display: grid;
+  gap: var(--esp-16);
+}
+
+/* Ainda não vista pelo administrador: faixa dourada no topo */
+.encomenda--nova {
+  border-top: 3px solid var(--color-gold);
+}
+
+.encomenda__topo {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--esp-16);
+}
+
+.encomenda__topo .avatar {
+  width: 48px;
+  height: 48px;
+  font-size: var(--fs-14);
+}
+
+.encomenda__nome .badge {
+  padding: 2px 8px;
+}
+
+.encomenda__contactos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-8) var(--esp-24);
+  font-size: var(--fs-14);
+}
+
+.encomenda__contactos a {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-8);
+  min-height: 24px;
+  overflow-wrap: anywhere;
+}
+
+.encomenda__contactos a:hover {
+  text-decoration: underline;
+}
+
+.encomenda__contactos .icone {
+  width: 16px;
+  height: 16px;
+  color: var(--color-gray);
+}
+
+/* Duas encomendas por linha em ecrãs largos */
+@media (min-width: 1024px) {
+  .encomendas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .encomendas .admin-lista__vazio {
+    grid-column: 1 / -1;
+  }
+}
+
 /* ===== RODAPÉ DO PAINEL ===== */
 .admin-rodape {
   margin-top: var(--esp-64);
@@ -210,17 +351,8 @@
 }
 
 @media (min-width: 1024px) {
-  .admin-painel {
-    grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
-    align-items: start;
-  }
-
-  /* O formulário acompanha o scroll da lista */
-  .admin-form {
-    position: sticky;
-    top: calc(var(--navbar-altura) + var(--esp-24));
-    max-height: calc(100vh - var(--navbar-altura) - var(--esp-48));
-    overflow-y: auto;
+  .admin-lista--grelha {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
 

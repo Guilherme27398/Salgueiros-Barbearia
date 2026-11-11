@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="css/pages/admin.css">
   <script src="js/dados.js" defer></script>
   <script src="js/main.js" defer></script>
+  <script src="js/loja.js" defer></script>
   <script src="js/admin.js" defer></script>
 </head>
 <body data-pagina="admin">
@@ -25,7 +26,7 @@
 
   <main>
 
-    <!-- ===== TOPO: QUEM TEM SESSÃO E O QUE EXISTE NO SITE ===== -->
+    <!-- ===== TOPO: QUEM TEM SESSÃO ===== -->
     <section class="perfil-topo">
       <div class="container">
         <div class="perfil-topo__identidade">
@@ -36,7 +37,6 @@
           </div>
           <a class="btn btn--secundario" href="index.html">Ver o site</a>
         </div>
-        <dl class="perfil-resumo" id="admin-resumo"></dl>
       </div>
     </section>
 
@@ -44,147 +44,211 @@
       <div class="container">
 
         <div class="separadores" role="tablist" aria-label="Secções do painel">
-          <button class="separadores__item" type="button" role="tab" id="sep-servicos" aria-controls="painel-servicos" aria-selected="true">Serviços</button>
+          <button class="separadores__item" type="button" role="tab" id="sep-encomendas" aria-controls="painel-encomendas" aria-selected="true">Encomendas</button>
+          <button class="separadores__item" type="button" role="tab" id="sep-servicos" aria-controls="painel-servicos" aria-selected="false" tabindex="-1">Serviços</button>
           <button class="separadores__item" type="button" role="tab" id="sep-produtos" aria-controls="painel-produtos" aria-selected="false" tabindex="-1">Produtos</button>
           <button class="separadores__item" type="button" role="tab" id="sep-cortes" aria-controls="painel-cortes" aria-selected="false" tabindex="-1">Galeria</button>
         </div>
 
+        <!-- ===== ENCOMENDAS ===== -->
+        <!-- Compras finalizadas pelos clientes no carrinho (js/loja.js); é o separador que abre por defeito -->
+        <div role="tabpanel" id="painel-encomendas" aria-labelledby="sep-encomendas">
+          <h2 class="admin-lista__titulo">Encomendas dos clientes</h2>
+          <p class="admin-encomendas__texto">Compras finalizadas no site: quem comprou, o que comprou e quanto. O cliente levanta e paga na barbearia.</p>
+          <ul class="encomendas" id="lista-encomendas"></ul>
+        </div>
+
         <!-- ===== SERVIÇOS ===== -->
-        <div class="admin-painel" role="tabpanel" id="painel-servicos" aria-labelledby="sep-servicos">
-          <form class="admin-form" id="form-servicos" novalidate>
-            <h2 class="admin-form__titulo" data-titulo>Novo serviço</h2>
-            <div class="campo campo--bloco">
-              <label class="campo__rotulo" for="servico-nome">Nome do serviço</label>
-              <input class="campo__controlo" type="text" id="servico-nome" name="nome" required maxlength="60" aria-describedby="servico-nome-erro">
-              <p class="campo__erro" id="servico-nome-erro" aria-live="polite"></p>
-            </div>
-            <div class="campo campo--bloco">
-              <label class="campo__rotulo" for="servico-descricao">Descrição</label>
-              <textarea class="campo__controlo" id="servico-descricao" name="descricao" rows="3" required maxlength="200" aria-describedby="servico-descricao-erro"></textarea>
-              <p class="campo__erro" id="servico-descricao-erro" aria-live="polite"></p>
-            </div>
-            <div class="admin-form__par">
-              <div class="campo campo--bloco">
-                <label class="campo__rotulo" for="servico-preco">Preço (€)</label>
-                <input class="campo__controlo" type="number" id="servico-preco" name="preco" required min="0.01" step="0.01" inputmode="decimal" aria-describedby="servico-preco-erro">
-                <p class="campo__erro" id="servico-preco-erro" aria-live="polite"></p>
+        <div class="admin-painel" role="tabpanel" id="painel-servicos" aria-labelledby="sep-servicos" hidden>
+          <div class="admin-painel__topo">
+            <h2 class="admin-lista__titulo">Serviços no site</h2>
+            <button class="btn btn--primario" type="button" data-novo="servicos">
+              <svg class="icone" aria-hidden="true"><use href="#i-mais"></use></svg>Adicionar serviço
+            </button>
+          </div>
+          <ul class="admin-lista" id="lista-servicos"></ul>
+
+          <!-- Formulário de adicionar e alterar, aberto em janela por js/admin.js -->
+          <dialog class="admin-janela" id="janela-servicos" aria-labelledby="titulo-servicos">
+            <form class="admin-form" id="form-servicos" novalidate>
+              <div class="admin-form__topo">
+                <h2 class="admin-form__titulo" id="titulo-servicos" data-titulo>Novo serviço</h2>
+                <button class="navbar__icone" type="button" data-cancelar aria-label="Fechar">
+                  <svg class="icone" aria-hidden="true"><use href="#i-fechar"></use></svg>
+                </button>
               </div>
               <div class="campo campo--bloco">
-                <label class="campo__rotulo" for="servico-duracao">Tempo estimado (min)</label>
-                <input class="campo__controlo" type="number" id="servico-duracao" name="duracao" required min="1" step="1" inputmode="numeric" aria-describedby="servico-duracao-erro">
-                <p class="campo__erro" id="servico-duracao-erro" aria-live="polite"></p>
+                <label class="campo__rotulo" for="servico-nome">Nome do serviço</label>
+                <input class="campo__controlo" type="text" id="servico-nome" name="nome" required maxlength="60" aria-describedby="servico-nome-erro">
+                <p class="campo__erro" id="servico-nome-erro" aria-live="polite"></p>
               </div>
-            </div>
-            <div class="campo campo--bloco">
-              <label class="campo__rotulo" for="servico-imagem">Fotografia <span class="campo__ajuda">(opcional)</span></label>
-              <div class="admin-form__foto">
-                <span class="media media--1x1" data-previa></span>
-                <div>
-                  <input class="admin-form__ficheiro" type="file" id="servico-imagem" name="imagem" accept="image/*" aria-describedby="servico-imagem-erro">
-                  <button class="admin-form__sem-foto" type="button" data-sem-foto hidden>Remover fotografia</button>
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="servico-descricao">Descrição</label>
+                <textarea class="campo__controlo" id="servico-descricao" name="descricao" rows="3" required maxlength="200" aria-describedby="servico-descricao-erro"></textarea>
+                <p class="campo__erro" id="servico-descricao-erro" aria-live="polite"></p>
+              </div>
+              <div class="admin-form__par">
+                <div class="campo campo--bloco">
+                  <label class="campo__rotulo" for="servico-preco">Preço (€)</label>
+                  <input class="campo__controlo" type="number" id="servico-preco" name="preco" required min="0.01" step="0.01" inputmode="decimal" aria-describedby="servico-preco-erro">
+                  <p class="campo__erro" id="servico-preco-erro" aria-live="polite"></p>
+                </div>
+                <div class="campo campo--bloco">
+                  <label class="campo__rotulo" for="servico-duracao">Tempo estimado (min)</label>
+                  <input class="campo__controlo" type="number" id="servico-duracao" name="duracao" required min="1" step="1" inputmode="numeric" aria-describedby="servico-duracao-ajuda servico-duracao-erro">
+                  <p class="campo__ajuda" id="servico-duracao-ajuda" aria-live="polite"></p>
+                  <p class="campo__erro" id="servico-duracao-erro" aria-live="polite"></p>
                 </div>
               </div>
-              <p class="campo__erro" id="servico-imagem-erro" aria-live="polite"></p>
-            </div>
-            <label class="caixa" for="servico-home">
-              <input class="campo__caixa" type="checkbox" id="servico-home" name="home" checked>
-              <span>Mostrar também na página inicial</span>
-            </label>
-            <div class="admin-form__acoes">
-              <button class="btn btn--primario" type="submit" data-submeter>Adicionar serviço</button>
-              <button class="btn btn--texto admin-form__cancelar" type="button" data-cancelar hidden>Cancelar</button>
-            </div>
-          </form>
-
-          <div>
-            <h2 class="admin-lista__titulo">Serviços no site</h2>
-            <ul class="admin-lista" id="lista-servicos"></ul>
-          </div>
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="servico-imagem">Fotografia <span class="campo__ajuda">(opcional)</span></label>
+                <div class="admin-form__foto">
+                  <span class="media media--1x1" data-previa></span>
+                  <div>
+                    <input class="admin-form__ficheiro" type="file" id="servico-imagem" name="imagem" accept="image/*" aria-describedby="servico-imagem-erro">
+                    <button class="admin-form__sem-foto" type="button" data-sem-foto hidden>Remover fotografia</button>
+                  </div>
+                </div>
+                <p class="campo__erro" id="servico-imagem-erro" aria-live="polite"></p>
+              </div>
+              <label class="caixa" for="servico-home">
+                <input class="campo__caixa" type="checkbox" id="servico-home" name="home" checked>
+                <span>Mostrar também na página inicial</span>
+              </label>
+              <p class="campo__erro" data-erro-geral role="alert"></p>
+              <div class="admin-form__acoes">
+                <button class="btn btn--primario" type="submit" data-submeter>Adicionar serviço</button>
+                <button class="btn btn--texto admin-form__cancelar" type="button" data-cancelar>Cancelar</button>
+              </div>
+            </form>
+          </dialog>
         </div>
 
         <!-- ===== PRODUTOS ===== -->
         <div class="admin-painel" role="tabpanel" id="painel-produtos" aria-labelledby="sep-produtos" hidden>
-          <form class="admin-form" id="form-produtos" novalidate>
-            <h2 class="admin-form__titulo" data-titulo>Novo produto</h2>
-            <div class="campo campo--bloco">
-              <label class="campo__rotulo" for="produto-nome">Nome do produto</label>
-              <input class="campo__controlo" type="text" id="produto-nome" name="nome" required maxlength="60" aria-describedby="produto-nome-erro">
-              <p class="campo__erro" id="produto-nome-erro" aria-live="polite"></p>
-            </div>
-            <div class="campo campo--bloco">
-              <label class="campo__rotulo" for="produto-categoria">Categoria</label>
-              <select class="campo__controlo" id="produto-categoria" name="categoria" aria-describedby="produto-categoria-erro"></select>
-              <p class="campo__erro" id="produto-categoria-erro" aria-live="polite"></p>
-            </div>
-            <div class="admin-form__par">
-              <div class="campo campo--bloco">
-                <label class="campo__rotulo" for="produto-preco">Preço (€)</label>
-                <input class="campo__controlo" type="number" id="produto-preco" name="preco" required min="0.01" step="0.01" inputmode="decimal" aria-describedby="produto-preco-erro">
-                <p class="campo__erro" id="produto-preco-erro" aria-live="polite"></p>
+          <div class="admin-painel__topo">
+            <h2 class="admin-lista__titulo">Produtos no site</h2>
+            <button class="btn btn--primario" type="button" data-novo="produtos">
+              <svg class="icone" aria-hidden="true"><use href="#i-mais"></use></svg>Adicionar produto
+            </button>
+          </div>
+          <ul class="admin-lista" id="lista-produtos"></ul>
+
+          <!-- Formulário de adicionar e alterar, aberto em janela por js/admin.js -->
+          <dialog class="admin-janela" id="janela-produtos" aria-labelledby="titulo-produtos">
+            <form class="admin-form" id="form-produtos" novalidate>
+              <div class="admin-form__topo">
+                <h2 class="admin-form__titulo" id="titulo-produtos" data-titulo>Novo produto</h2>
+                <button class="navbar__icone" type="button" data-cancelar aria-label="Fechar">
+                  <svg class="icone" aria-hidden="true"><use href="#i-fechar"></use></svg>
+                </button>
               </div>
               <div class="campo campo--bloco">
-                <label class="campo__rotulo" for="produto-stock">Quantidade em stock</label>
-                <input class="campo__controlo" type="number" id="produto-stock" name="stock" required min="0" step="1" inputmode="numeric" aria-describedby="produto-stock-erro">
-                <p class="campo__erro" id="produto-stock-erro" aria-live="polite"></p>
+                <label class="campo__rotulo" for="produto-nome">Nome do produto</label>
+                <input class="campo__controlo" type="text" id="produto-nome" name="nome" required maxlength="60" aria-describedby="produto-nome-erro">
+                <p class="campo__erro" id="produto-nome-erro" aria-live="polite"></p>
               </div>
-            </div>
-            <div class="campo campo--bloco">
-              <label class="campo__rotulo" for="produto-imagem">Fotografia <span class="campo__ajuda">(opcional)</span></label>
-              <div class="admin-form__foto">
-                <span class="media media--1x1" data-previa></span>
-                <div>
-                  <input class="admin-form__ficheiro" type="file" id="produto-imagem" name="imagem" accept="image/*" aria-describedby="produto-imagem-erro">
-                  <button class="admin-form__sem-foto" type="button" data-sem-foto hidden>Remover fotografia</button>
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="produto-categoria">Categoria</label>
+                <select class="campo__controlo" id="produto-categoria" name="categoria" aria-describedby="produto-categoria-erro"></select>
+                <p class="campo__erro" id="produto-categoria-erro" aria-live="polite"></p>
+              </div>
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="produto-subcategoria">Subcategoria</label>
+                <select class="campo__controlo" id="produto-subcategoria" name="subcategoria" aria-describedby="produto-subcategoria-erro"></select>
+                <p class="campo__erro" id="produto-subcategoria-erro" aria-live="polite"></p>
+              </div>
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="produto-descricao">Descrição <span class="campo__ajuda">(opcional)</span></label>
+                <textarea class="campo__controlo" id="produto-descricao" name="descricao" rows="3" maxlength="300" aria-describedby="produto-descricao-erro"></textarea>
+                <p class="campo__erro" id="produto-descricao-erro" aria-live="polite"></p>
+              </div>
+              <div class="admin-form__par">
+                <div class="campo campo--bloco">
+                  <label class="campo__rotulo" for="produto-preco">Preço (€)</label>
+                  <input class="campo__controlo" type="number" id="produto-preco" name="preco" required min="0.01" step="0.01" inputmode="decimal" aria-describedby="produto-preco-erro">
+                  <p class="campo__erro" id="produto-preco-erro" aria-live="polite"></p>
+                </div>
+                <div class="campo campo--bloco">
+                  <label class="campo__rotulo" for="produto-stock">Quantidade em stock</label>
+                  <input class="campo__controlo" type="number" id="produto-stock" name="stock" required min="0" step="1" inputmode="numeric" aria-describedby="produto-stock-ajuda produto-stock-erro">
+                  <p class="campo__ajuda" id="produto-stock-ajuda"></p>
+                  <p class="campo__erro" id="produto-stock-erro" aria-live="polite"></p>
                 </div>
               </div>
-              <p class="campo__erro" id="produto-imagem-erro" aria-live="polite"></p>
-            </div>
-            <label class="caixa" for="produto-destaque">
-              <input class="campo__caixa" type="checkbox" id="produto-destaque" name="destaque">
-              <span>Mostrar no carrossel de destaques da página inicial</span>
-            </label>
-            <div class="admin-form__acoes">
-              <button class="btn btn--primario" type="submit" data-submeter>Adicionar produto</button>
-              <button class="btn btn--texto admin-form__cancelar" type="button" data-cancelar hidden>Cancelar</button>
-            </div>
-          </form>
-
-          <div>
-            <h2 class="admin-lista__titulo">Produtos no site</h2>
-            <ul class="admin-lista" id="lista-produtos"></ul>
-          </div>
+              <!-- Tamanhos (ml ou tamanho de roupa), cada um com o seu stock; as linhas são criadas por js/admin.js -->
+              <div class="campo campo--bloco">
+                <p class="campo__rotulo" id="produto-tamanhos-rotulo">Tamanhos e stock de cada um <span class="campo__ajuda">(opcional)</span></p>
+                <ul class="admin-tamanhos" id="produto-tamanhos" aria-labelledby="produto-tamanhos-rotulo"></ul>
+                <button class="admin-tamanhos__novo" type="button" id="produto-tamanho-novo">Adicionar tamanho</button>
+                <p class="campo__erro" id="produto-tamanhos-erro" aria-live="polite"></p>
+              </div>
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="produto-imagem">Fotografia <span class="campo__ajuda">(opcional)</span></label>
+                <div class="admin-form__foto">
+                  <span class="media media--1x1" data-previa></span>
+                  <div>
+                    <input class="admin-form__ficheiro" type="file" id="produto-imagem" name="imagem" accept="image/*" aria-describedby="produto-imagem-erro">
+                    <button class="admin-form__sem-foto" type="button" data-sem-foto hidden>Remover fotografia</button>
+                  </div>
+                </div>
+                <p class="campo__erro" id="produto-imagem-erro" aria-live="polite"></p>
+              </div>
+              <label class="caixa" for="produto-destaque">
+                <input class="campo__caixa" type="checkbox" id="produto-destaque" name="destaque">
+                <span>Mostrar no carrossel de destaques da página inicial</span>
+              </label>
+              <p class="campo__erro" data-erro-geral role="alert"></p>
+              <div class="admin-form__acoes">
+                <button class="btn btn--primario" type="submit" data-submeter>Adicionar produto</button>
+                <button class="btn btn--texto admin-form__cancelar" type="button" data-cancelar>Cancelar</button>
+              </div>
+            </form>
+          </dialog>
         </div>
 
         <!-- ===== GALERIA ===== -->
         <div class="admin-painel" role="tabpanel" id="painel-cortes" aria-labelledby="sep-cortes" hidden>
-          <form class="admin-form" id="form-cortes" novalidate>
-            <h2 class="admin-form__titulo" data-titulo>Nova fotografia</h2>
-            <div class="campo campo--bloco">
-              <label class="campo__rotulo" for="corte-legenda">Nome do corte</label>
-              <input class="campo__controlo" type="text" id="corte-legenda" name="legenda" required maxlength="40" aria-describedby="corte-legenda-erro">
-              <p class="campo__erro" id="corte-legenda-erro" aria-live="polite"></p>
-            </div>
-            <div class="campo campo--bloco">
-              <label class="campo__rotulo" for="corte-imagem">Fotografia <span class="campo__ajuda">(ao alto fica melhor)</span></label>
-              <div class="admin-form__foto">
-                <span class="media media--4x5" data-previa></span>
-                <div>
-                  <input class="admin-form__ficheiro" type="file" id="corte-imagem" name="imagem" accept="image/*" required aria-describedby="corte-imagem-erro">
-                  <button class="admin-form__sem-foto" type="button" data-sem-foto hidden>Remover fotografia</button>
-                </div>
-              </div>
-              <p class="campo__erro" id="corte-imagem-erro" aria-live="polite"></p>
-            </div>
-            <div class="admin-form__acoes">
-              <button class="btn btn--primario" type="submit" data-submeter>Adicionar à galeria</button>
-              <button class="btn btn--texto admin-form__cancelar" type="button" data-cancelar hidden>Cancelar</button>
-            </div>
-          </form>
-
-          <div>
+          <div class="admin-painel__topo">
             <h2 class="admin-lista__titulo">Fotografias no carrossel da galeria</h2>
-            <ul class="admin-lista admin-lista--grelha" id="lista-cortes"></ul>
+            <button class="btn btn--primario" type="button" data-novo="cortes">
+              <svg class="icone" aria-hidden="true"><use href="#i-mais"></use></svg>Adicionar fotografia
+            </button>
           </div>
+          <ul class="admin-lista admin-lista--grelha" id="lista-cortes"></ul>
+
+          <!-- Formulário de adicionar e alterar, aberto em janela por js/admin.js -->
+          <dialog class="admin-janela" id="janela-cortes" aria-labelledby="titulo-cortes">
+            <form class="admin-form" id="form-cortes" novalidate>
+              <div class="admin-form__topo">
+                <h2 class="admin-form__titulo" id="titulo-cortes" data-titulo>Nova fotografia</h2>
+                <button class="navbar__icone" type="button" data-cancelar aria-label="Fechar">
+                  <svg class="icone" aria-hidden="true"><use href="#i-fechar"></use></svg>
+                </button>
+              </div>
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="corte-legenda">Nome do corte</label>
+                <input class="campo__controlo" type="text" id="corte-legenda" name="legenda" required maxlength="40" aria-describedby="corte-legenda-erro">
+                <p class="campo__erro" id="corte-legenda-erro" aria-live="polite"></p>
+              </div>
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="corte-imagem">Fotografia <span class="campo__ajuda">(ao alto fica melhor)</span></label>
+                <div class="admin-form__foto">
+                  <span class="media media--4x5" data-previa></span>
+                  <div>
+                    <input class="admin-form__ficheiro" type="file" id="corte-imagem" name="imagem" accept="image/*" required aria-describedby="corte-imagem-erro">
+                    <button class="admin-form__sem-foto" type="button" data-sem-foto hidden>Remover fotografia</button>
+                  </div>
+                </div>
+                <p class="campo__erro" id="corte-imagem-erro" aria-live="polite"></p>
+              </div>
+              <p class="campo__erro" data-erro-geral role="alert"></p>
+              <div class="admin-form__acoes">
+                <button class="btn btn--primario" type="submit" data-submeter>Adicionar à galeria</button>
+                <button class="btn btn--texto admin-form__cancelar" type="button" data-cancelar>Cancelar</button>
+              </div>
+            </form>
+          </dialog>
         </div>
 
         <!-- ===== PROTÓTIPO: ONDE FICAM AS ALTERAÇÕES ===== -->

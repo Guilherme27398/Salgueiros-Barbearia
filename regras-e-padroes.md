@@ -78,17 +78,19 @@ Salgueiros-Barbearia/
 ├── contactos.html
 ├── login.html
 ├── conta.html
+├── termos.html          # Termos de Utilização
+├── privacidade.html     # Política de Privacidade
 ├── 404.html
 ├── admin.html           # painel do barbeiro (no protótipo: conta de teste)
 ├── css/
 │   ├── base.css          # reset, tokens de cor, tipografia, espaçamentos
 │   ├── components.css    # botões, cartões, formulários, carrossel, lightbox
 │   ├── layout.css        # grelhas, header, footer
-│   └── pages/            # estilos específicos por página (se necessário)
+│   └── pages/            # estilos específicos por página (produtos, conta, admin e legal)
 ├── js/
 │   ├── main.js           # navbar, menu mobile, rodapé, animação de abertura e funções partilhadas
+│   ├── loja.js           # detalhe do produto, carrinho e encomendas (protótipo, em localStorage)
 │   ├── servicos.js       # destaque e cartões de serviços (home e servicos.html)
-│   ├── home.js           # destaque da navbar na home
 │   ├── produtos.js       # pesquisa, filtros e ordenação da página de produtos
 │   ├── carrossel.js      # carrossel de produtos
 │   ├── galeria.js        # lightbox
@@ -119,7 +121,7 @@ Salgueiros-Barbearia/
 - **Tom de voz:** sóbrio, confiante e acolhedor, com um toque de tradição. Frases curtas e diretas. Evitar gíria e exclamações em excesso.
 - **Sem lorem ipsum** em secções visíveis.
 - **Nome da marca:** "Salgueiro's Barbearia" (com apóstrofo). No logótipo, manter a grafia do ficheiro original.
-- Preços: `18 €` (espaço antes do símbolo). Horas: `09:00`. Datas: `DD/MM/AAAA`. Telemóvel: `+351 900 000 000`.
+- Preços dos produtos sempre com cêntimos: `18,00 €`. Preços dos serviços sem cêntimos quando são certos: `18 €`. Espaço antes do símbolo. Horas: `09:00`. Datas: `DD/MM/AAAA`. Telemóvel: `+351 900 000 000`.
 - Nomes de serviços como o barbeiro os usa, só com a primeira letra em maiúscula: "Corte com degradé", "Cabelo e barba". Exceção: "ALL IN".
 - Textos vindos do cliente em português do Brasil ("seu visual", "você") são adaptados a pt-PT e encurtados antes de entrarem no site.
 
@@ -161,6 +163,9 @@ Salgueiros-Barbearia/
 - Redes sociais com ícones oficiais e `aria-label` no link (ex.: "Instagram da Salgueiro's Barbearia").
 
 ### 5.7 Hero da home
+- A fotografia, a sobreposição preta e o texto branco vivem na classe partilhada `.pagina-hero` (`css/layout.css`), usada no hero da home e nos cabeçalhos de Produtos e Serviços. Os caminhos das fotografias existem num só sítio (`IMAGENS.hero` para a home e Serviços, `IMAGENS.heroProdutos` para Produtos, em `js/dados.js`).
+- Cada página só muda o enquadramento com variáveis: `--hero-posicao` (zona da fotografia), `--hero-foco`, `--hero-foco-tamanho` e `--hero-foco-nucleo` (zona mais escura por trás do texto) e `--hero-sobreposicao` (opacidade).
+- Texto sobre a fotografia com contraste mínimo de 4,5:1, medido sobre a captura do ecrã e não só calculado.
 - A imagem de fundo tem sempre uma sobreposição preta (mínimo 40% de opacidade) para garantir leitura do nome e do slogan.
 - Nome e slogan centrados horizontal e verticalmente.
 
@@ -169,7 +174,7 @@ Salgueiros-Barbearia/
 ### 5.8 Navbar
 - Transparente sobre o hero, sem linhas nem sombras. Ao fazer scroll, passa para fundo preto sólido com linha dourada fina, com transição de cerca de 200 ms (desativada com `prefers-reduced-motion`).
 - Ordem fixa em desktop: à esquerda Instagram, Início e Serviços; ao centro o logótipo; à direita Produtos, Marcações e "Iniciar sessão" (ou ícone de utilizador com sessão iniciada).
-- Início faz scroll para o topo da home. Serviços faz scroll para a secção `#servicos` da home. Marcações abre o site externo de marcações em novo separador.
+- Início faz scroll para o topo da home. Serviços leva à página `servicos.html`, com todos os serviços. Marcações abre o site externo de marcações em novo separador.
 - O ícone de utilizador abre um menu suspenso com "Ver perfil" e "Terminar sessão". Fecha com **Esc** e com clique fora.
 - O link do Instagram abre em novo separador com `rel="noopener noreferrer"` e `aria-label` descritivo.
 - Estado ativo a dourado e foco visível por teclado em todos os itens.
@@ -302,7 +307,8 @@ Antes de considerar uma tarefa concluída:
   - Fotografias (1 a 5, com pré-visualização; a primeira é a principal)
   - Preço em euros e preço promocional opcional
   - Quantidade em stock (número inteiro, mínimo 0)
-  - Alerta de stock baixo (ex.: abaixo de 3 unidades)
+  - Tamanhos opcionais (ml ou tamanho de roupa), cada um com o seu stock
+  - Alerta de stock baixo ("Últimas unidades", abaixo de 2 unidades)
   - Visível na loja (sim/não)
   - Em destaque no carrossel da home (sim/não)
 - Remover pede confirmação.
@@ -339,5 +345,5 @@ Antes de considerar uma tarefa concluída:
 8. **Login:** métodos de entrada (email e palavra-passe, Google, telemóvel por SMS).
 9. **Idioma:** pt-PT apenas ou também inglês.
 10. **Contas de cliente:** o cliente cria a conta no site (`registo.html`). Falta decidir como os cortes e as compras feitos na loja ficam registados no perfil (o barbeiro regista-os no painel?) e se o email tem de ser confirmado por mensagem.
-12. **"Voltar a comprar":** no protótipo é uma reserva simulada para levantar na barbearia. Confirmar se será reserva, encomenda com pagamento online ou só um pedido por WhatsApp.
+12. **Compras no site:** no protótipo, finalizar a compra regista uma encomenda para levantar e pagar na barbearia, sem pagamento. Confirmar se será reserva, encomenda com pagamento online ou só um pedido por WhatsApp.
 11. **URL do site de marcações:** fornecer o endereço externo para ligar todos os botões de marcação (ver `URL_MARCACOES` em `js/dados.js`).

@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="css/pages/produtos.css">
   <script src="js/dados.js" defer></script>
   <script src="js/main.js" defer></script>
+  <script src="js/loja.js" defer></script>
   <script src="js/produtos.js" defer></script>
 </head>
 <body data-pagina="produtos">
@@ -25,7 +26,9 @@
   <main>
 
     <!-- ===== CABEÇALHO DA PÁGINA ===== -->
-    <section class="pagina-cabecalho">
+    <!-- Fotografia própria (IMAGENS.heroProdutos); o enquadramento vem de .pagina-hero--produtos -->
+    <section class="pagina-cabecalho pagina-hero pagina-hero--produtos">
+      <div class="pagina-hero__fundo media" data-imagem="heroProdutos" data-alt="" data-label="Fotografia dos produtos · 16:9"></div>
       <div class="container">
         <nav aria-label="Caminho">
           <ol class="migalhas">
@@ -42,32 +45,85 @@
     <section class="produtos" aria-label="Catálogo de produtos">
       <div class="container">
 
-        <form class="produtos__barra" id="produtos-filtros" role="search">
-          <div class="campo campo--pesquisa">
+        <!-- Pesquisa em destaque, a toda a largura -->
+        <form class="produtos__pesquisa" id="produtos-pesquisa" role="search">
+          <div class="campo campo--pesquisa campo--grande">
             <label class="sr-only" for="pesquisa">Pesquisar produtos</label>
             <svg class="icone" aria-hidden="true"><use href="#i-pesquisa"></use></svg>
-            <input class="campo__controlo" type="search" id="pesquisa" placeholder="Pesquisar produtos" autocomplete="off">
-          </div>
-          <div class="chips" id="categorias" role="group" aria-label="Filtrar por categoria"></div>
-          <div class="campo campo--ordem">
-            <label class="campo__rotulo" for="ordem">Ordenar por</label>
-            <select class="campo__controlo" id="ordem">
-              <option value="nome-asc">Nome (A–Z)</option>
-              <option value="nome-desc">Nome (Z–A)</option>
-              <option value="preco-asc">Preço (mais baixo)</option>
-              <option value="preco-desc">Preço (mais alto)</option>
-            </select>
+            <input class="campo__controlo" type="search" id="pesquisa" placeholder="Pesquisar produtos, por exemplo «cera»" autocomplete="off">
           </div>
         </form>
 
-        <p class="produtos__contagem" id="produtos-contagem" aria-live="polite"></p>
+        <div class="produtos__corpo">
 
-        <ul class="produtos__grelha" id="produtos-grelha"></ul>
+          <!-- ===== FILTROS (coluna da esquerda; em ecrãs estreitos abre e fecha) ===== -->
+          <aside class="filtros" aria-label="Filtros">
+            <details class="filtros__caixa" id="filtros">
+              <summary class="filtros__alternar">
+                <span>Filtros <span class="filtros__ativos" id="filtros-ativos"></span></span>
+                <svg class="icone" aria-hidden="true"><use href="#i-seta-baixo"></use></svg>
+              </summary>
 
-        <div class="produtos__vazio" id="produtos-vazio" hidden>
-          <h2>Nenhum produto encontrado</h2>
-          <p>Experimente outra pesquisa ou outra categoria.</p>
-          <button class="btn btn--contorno" type="button" data-limpar>Limpar filtros</button>
+              <form class="filtros__form" id="produtos-filtros">
+
+                <fieldset class="filtros__grupo">
+                  <legend class="filtros__titulo">Categorias</legend>
+                  <ul class="filtros__categorias" id="categorias"></ul>
+                </fieldset>
+
+                <fieldset class="filtros__grupo">
+                  <legend class="filtros__titulo">Preço</legend>
+                  <div class="intervalo" id="preco-intervalo">
+                    <div class="intervalo__barra" aria-hidden="true"></div>
+                    <input class="intervalo__cursor" type="range" id="preco-min-barra" step="1" aria-label="Preço mínimo">
+                    <input class="intervalo__cursor" type="range" id="preco-max-barra" step="1" aria-label="Preço máximo">
+                  </div>
+                  <div class="intervalo__campos">
+                    <label class="intervalo__campo" for="preco-min">
+                      <span>De</span>
+                      <input class="campo__controlo" type="number" id="preco-min" step="1" inputmode="decimal">
+                      <span aria-hidden="true">€</span>
+                    </label>
+                    <label class="intervalo__campo" for="preco-max">
+                      <span>até</span>
+                      <input class="campo__controlo" type="number" id="preco-max" step="1" inputmode="decimal">
+                      <span aria-hidden="true">€</span>
+                    </label>
+                  </div>
+                </fieldset>
+
+                <fieldset class="filtros__grupo">
+                  <legend class="filtros__titulo">Ordenar por</legend>
+                  <label class="caixa"><input class="campo__caixa" type="radio" name="ordem" value="nome-asc" checked><span>Nome (A–Z)</span></label>
+                  <label class="caixa"><input class="campo__caixa" type="radio" name="ordem" value="nome-desc"><span>Nome (Z–A)</span></label>
+                  <label class="caixa"><input class="campo__caixa" type="radio" name="ordem" value="preco-asc"><span>Preço (mais baixo primeiro)</span></label>
+                  <label class="caixa"><input class="campo__caixa" type="radio" name="ordem" value="preco-desc"><span>Preço (mais alto primeiro)</span></label>
+                </fieldset>
+
+                <fieldset class="filtros__grupo">
+                  <legend class="filtros__titulo">Disponibilidade</legend>
+                  <label class="caixa"><input class="campo__caixa" type="checkbox" id="so-stock"><span>Só produtos em stock</span></label>
+                  <label class="caixa"><input class="campo__caixa" type="checkbox" id="so-destaques"><span>Só destaques do barbeiro</span></label>
+                </fieldset>
+
+                <button class="btn btn--contorno filtros__limpar" type="button" data-limpar>Limpar filtros</button>
+              </form>
+            </details>
+          </aside>
+
+          <!-- ===== RESULTADOS ===== -->
+          <div class="produtos__resultados">
+            <p class="produtos__contagem" id="produtos-contagem" aria-live="polite"></p>
+
+            <ul class="produtos__grelha" id="produtos-grelha"></ul>
+
+            <div class="produtos__vazio" id="produtos-vazio" hidden>
+              <h2>Nenhum produto encontrado</h2>
+              <p>Experimente outra pesquisa ou alargue os filtros.</p>
+              <button class="btn btn--contorno" type="button" data-limpar>Limpar filtros</button>
+            </div>
+          </div>
+
         </div>
 
       </div>

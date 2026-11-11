@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="css/pages/conta.css">
   <script src="js/dados.js" defer></script>
   <script src="js/main.js" defer></script>
+  <script src="js/loja.js" defer></script>
   <script src="js/conta.js" defer></script>
 </head>
 <body data-pagina="conta">
@@ -23,7 +24,7 @@
 
   <main>
 
-    <!-- ===== TOPO: QUEM É O CLIENTE E O RESUMO NA BARBEARIA ===== -->
+    <!-- ===== TOPO: QUEM É O CLIENTE ===== -->
     <section class="perfil-topo">
       <div class="container">
         <div class="perfil-topo__identidade">
@@ -34,7 +35,6 @@
           </div>
           <a class="btn btn--primario" data-link="marcacoes" href="#">Marcar próximo corte</a>
         </div>
-        <dl class="perfil-resumo" id="perfil-resumo"></dl>
       </div>
     </section>
 
@@ -48,38 +48,72 @@
 
         <!-- ===== COMPRAS ===== -->
         <div role="tabpanel" id="painel-compras" aria-labelledby="sep-compras">
-          <ul class="perfil-compras" id="perfil-compras"></ul>
+          <div class="compras">
+
+            <!-- Organizar as compras (coluna da esquerda em ecrãs largos) -->
+            <aside class="compras__filtros" aria-label="Organizar as compras">
+              <form id="compras-ordem">
+                <fieldset class="compras__grupo">
+                  <legend class="compras__titulo">Data da compra</legend>
+                  <label class="caixa"><input class="campo__caixa" type="radio" name="ordem" value="data-desc" checked><span>Mais recentes primeiro</span></label>
+                  <label class="caixa"><input class="campo__caixa" type="radio" name="ordem" value="data-asc"><span>Mais antigas primeiro</span></label>
+                </fieldset>
+                <fieldset class="compras__grupo">
+                  <legend class="compras__titulo">Preço</legend>
+                  <label class="caixa"><input class="campo__caixa" type="radio" name="ordem" value="total-desc"><span>Total mais alto primeiro</span></label>
+                  <label class="caixa"><input class="campo__caixa" type="radio" name="ordem" value="total-asc"><span>Total mais baixo primeiro</span></label>
+                </fieldset>
+              </form>
+            </aside>
+
+            <!-- Um cartão por compra, montado por js/conta.js -->
+            <ul class="compras__lista" id="perfil-compras"></ul>
+
+          </div>
         </div>
 
         <!-- ===== OS MEUS DADOS ===== -->
         <div role="tabpanel" id="painel-dados" aria-labelledby="sep-dados" hidden>
+          <!-- Cartão com os dados; "Editar dados" torna os campos editáveis (js/conta.js) -->
           <form class="perfil-dados" id="perfil-form" novalidate>
-            <div class="campo campo--bloco">
-              <label class="campo__rotulo" for="dado-nome">Nome</label>
-              <input class="campo__controlo" type="text" id="dado-nome" name="nome" autocomplete="name" required minlength="2" readonly aria-describedby="dado-nome-erro">
-              <p class="campo__erro" id="dado-nome-erro" aria-live="polite"></p>
-            </div>
-            <div class="campo campo--bloco">
-              <label class="campo__rotulo" for="dado-email">Email</label>
-              <input class="campo__controlo" type="email" id="dado-email" name="email" autocomplete="email" required readonly aria-describedby="dado-email-erro">
-              <p class="campo__erro" id="dado-email-erro" aria-live="polite"></p>
-            </div>
-            <div class="campo campo--bloco">
-              <label class="campo__rotulo" for="dado-telemovel">Telemóvel</label>
-              <input class="campo__controlo" type="tel" id="dado-telemovel" name="telemovel" autocomplete="tel" required pattern="\+?[0-9 ]{9,17}" readonly aria-describedby="dado-telemovel-erro">
-              <p class="campo__erro" id="dado-telemovel-erro" aria-live="polite"></p>
+            <div class="perfil-dados__topo">
+              <div>
+                <h2 class="perfil-dados__titulo">Dados pessoais</h2>
+                <p class="perfil-dados__texto">É com estes dados que a barbearia o contacta sobre as suas compras.</p>
+              </div>
+              <button class="btn btn--contorno" type="button" id="dados-editar">Editar dados</button>
             </div>
 
-            <div class="perfil-dados__acoes">
-              <button class="btn btn--contorno" type="button" id="dados-editar">Editar dados</button>
-              <button class="btn btn--primario" type="submit" id="dados-guardar" hidden>Guardar alterações</button>
-              <button class="btn btn--texto perfil-dados__cancelar" type="button" id="dados-cancelar" hidden>Cancelar</button>
+            <div class="perfil-dados__linha">
+              <span class="perfil-dados__icone" aria-hidden="true"><svg class="icone"><use href="#i-utilizador"></use></svg></span>
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="dado-nome">Nome</label>
+                <input class="campo__controlo" type="text" autocomplete="name" required minlength="2" id="dado-nome" name="nome" readonly aria-describedby="dado-nome-erro">
+                <p class="campo__erro" id="dado-nome-erro" aria-live="polite"></p>
+              </div>
+            </div>
+            <div class="perfil-dados__linha">
+              <span class="perfil-dados__icone" aria-hidden="true"><svg class="icone"><use href="#i-email"></use></svg></span>
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="dado-email">Email</label>
+                <input class="campo__controlo" type="email" autocomplete="email" required id="dado-email" name="email" readonly aria-describedby="dado-email-erro">
+                <p class="campo__erro" id="dado-email-erro" aria-live="polite"></p>
+              </div>
+            </div>
+            <div class="perfil-dados__linha">
+              <span class="perfil-dados__icone" aria-hidden="true"><svg class="icone"><use href="#i-telefone"></use></svg></span>
+              <div class="campo campo--bloco">
+                <label class="campo__rotulo" for="dado-telemovel">Telemóvel</label>
+                <input class="campo__controlo" type="tel" autocomplete="tel" required pattern="\+?[0-9 ]{9,17}" id="dado-telemovel" name="telemovel" readonly aria-describedby="dado-telemovel-erro">
+                <p class="campo__erro" id="dado-telemovel-erro" aria-live="polite"></p>
+              </div>
+            </div>
+
+            <div class="perfil-dados__acoes" id="dados-acoes" hidden>
+              <button class="btn btn--primario" type="submit" id="dados-guardar">Guardar alterações</button>
+              <button class="btn btn--texto perfil-dados__cancelar" type="button" id="dados-cancelar">Cancelar</button>
             </div>
           </form>
-
-          <button class="perfil__sair" type="button" id="perfil-sair">
-            <svg class="icone" aria-hidden="true"><use href="#i-sair"></use></svg>Terminar sessão
-          </button>
         </div>
 
       </div>

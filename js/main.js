@@ -1,14 +1,16 @@
 /*
  * Componentes globais, iguais em todas as páginas: ícones, navbar, menu mobile,
  * rodapé, WhatsApp, cookies, animação de abertura e funções partilhadas.
+ * O detalhe do produto, o carrinho e as encomendas estão em loja.js.
  * Cada página indica quem é em <body data-pagina="...">.
  */
 
 const PAGINA = document.body.dataset.pagina;
 const NA_HOME = PAGINA === "home";
 const LINK_INICIO = NA_HOME ? "#topo" : "index.html";
-const LINK_SERVICOS = NA_HOME ? "#servicos" : "index.html#servicos";
+const LINK_SERVICOS = "servicos.html";
 const LOGO = "assets/images/logo/logo-salgueiros.png";
+const IMAGEM_INTRO = "assets/images/logo/splash-salgueiros.webp";
 const MOVIMENTO_REDUZIDO = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // Sessão simulada: guarda-se apenas um sinal de "sessão iniciada", nunca a palavra-passe.
@@ -57,8 +59,9 @@ function terminarSessao() {
   window.location.href = "index.html";
 }
 
-function formatarPreco(valor) {
-  return Number.isInteger(valor) ? `${valor} €` : `${valor.toFixed(2).replace(".", ",")} €`;
+// Os preços dos produtos mostram sempre os cêntimos ("35,00 €"); os dos serviços só quando os têm ("10 €").
+function formatarPreco(valor, sempreCentimos = true) {
+  return !sempreCentimos && Number.isInteger(valor) ? `${valor} €` : `${valor.toFixed(2).replace(".", ",")} €`;
 }
 
 // 45 → "45 min", 60 → "1 h", 90 → "1 h 30 min"
@@ -79,7 +82,15 @@ function mediaConteudo(src, alt, label, carregamento = "lazy") {
   return `<span class="media__vazio">${icone("imagem")}<span>${label}</span></span>`;
 }
 
+// "Últimas unidades" aparece quando restam menos unidades do que este número (e ainda há stock).
+const STOCK_BAIXO = 2;
+
+function ultimasUnidades(stock) {
+  return stock > 0 && stock < STOCK_BAIXO;
+}
+
 // Cartão de produto, usado no carrossel da home e na página de produtos.
+// O nome é um botão que cobre o cartão todo e abre o detalhe do produto (ver loja.js).
 function produtoCardHTML(produto, { titulo = "h3", mostrarDestaque = false } = {}) {
   const esgotado = produto.stock === 0;
   let badge = "";
@@ -94,9 +105,9 @@ function produtoCardHTML(produto, { titulo = "h3", mostrarDestaque = false } = {
       </div>
       <div class="produto-card__corpo">
         <p class="produto-card__marca">${produto.categoria}</p>
-        <${titulo} class="produto-card__nome">${produto.nome}</${titulo}>
+        <${titulo} class="produto-card__nome"><button class="produto-card__abrir" type="button" data-produto="${PRODUTOS.indexOf(produto)}">${produto.nome}</button></${titulo}>
         <p class="produto-card__preco">${formatarPreco(produto.preco)}</p>
-        ${!esgotado && produto.stock <= 3 ? '<p class="produto-card__stock">Últimas unidades</p>' : ""}
+        ${ultimasUnidades(produto.stock) ? '<p class="produto-card__stock">Últimas unidades</p>' : ""}
       </div>
     </article>`;
 }
@@ -136,11 +147,16 @@ const ICONES = `
     <symbol id="i-telefone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
     <symbol id="i-email" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></symbol>
     <symbol id="i-mensagem" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></symbol>
+    <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></symbol>
     <symbol id="i-sair" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></symbol>
     <symbol id="i-definicoes" viewBox="0 0 24 24"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></symbol>
     <symbol id="i-editar" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
     <symbol id="i-lixo" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M10 11v6M14 11v6"/></symbol>
-    <symbol id="i-repetir" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+    <symbol id="i-carrinho" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L21 7H6"/></symbol>
+    <symbol id="i-sino" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+    <symbol id="i-mais" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-menos" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-repetir"viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
   </svg>`;
 
 // Sem sessão: ícone que leva ao login. Com sessão: avatar com menu (Ver perfil e Terminar sessão).
@@ -165,9 +181,9 @@ function contaHTML() {
     </div>`;
 }
 
-function navLink(pagina, href, texto, extra = "") {
+function navLink(pagina, href, texto) {
   const ativo = PAGINA === pagina ? " navbar__link--ativo" : "";
-  return `<a class="navbar__link${ativo}" href="${href}" ${extra}>${texto}</a>`;
+  return `<a class="navbar__link${ativo}" href="${href}">${texto}</a>`;
 }
 
 const CABECALHO = `
@@ -176,8 +192,8 @@ const CABECALHO = `
       <div class="navbar__zona">
         <button class="navbar__icone navbar__icone--menu" id="menu-abrir" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-mobile">${icone("menu")}</button>
         <a class="navbar__icone navbar__icone--instagram" data-link="instagram" href="#" aria-label="Instagram da Salgueiro's Barbearia">${icone("instagram")}</a>
-        ${navLink("home", LINK_INICIO, "Início", 'data-nav="inicio"')}
-        ${navLink("servicos", LINK_SERVICOS, "Serviços", 'data-nav="servicos"')}
+        ${navLink("home", LINK_INICIO, "Início")}
+        ${navLink("servicos", LINK_SERVICOS, "Serviços")}
       </div>
       <a class="navbar__logo" href="${LINK_INICIO}" aria-label="Salgueiro's Barbearia, voltar ao início">
         <img src="${LOGO}" alt="" width="56" height="56">
@@ -218,7 +234,7 @@ const RODAPE = `
         </div>
         <div class="rodape__coluna">
           <h2 class="rodape__titulo">Localização</h2>
-          <address>Rua de exemplo, 123<br>4900-000 Viana do Castelo</address>
+          <address>Avenida do Antigo Concelho, 365<br>4905-604 Geraz do Lima (Santa Maria)</address>
           <div class="rodape__mapa media media--16x9" data-imagem="mapa" data-alt="Mapa com a localização da barbearia" data-label="Mapa da localização · 16:9"></div>
           <a class="btn btn--texto" data-link="mapa" href="#">Como chegar ${icone("seta-direita")}</a>
         </div>
@@ -243,18 +259,18 @@ const RODAPE = `
           <li><a href="${LINK_SERVICOS}">Serviços</a></li>
           <li><a href="produtos.html">Produtos</a></li>
           <li><a data-link="marcacoes" href="#">Marcações</a></li>
-          <li><a href="#">Política de Privacidade</a></li>
-          <li><a href="#">Termos de Utilização</a></li>
+          <li><a href="privacidade.html">Política de Privacidade</a></li>
+          <li><a href="termos.html">Termos de Utilização</a></li>
         </ul>
       </div>
     </div>
   </footer>
 
-  <a class="whatsapp" data-link="whatsapp" href="#" aria-label="Falar connosco no WhatsApp">${icone("mensagem")}</a>`;
+  <a class="whatsapp" data-link="whatsapp" href="#" aria-label="Falar connosco no WhatsApp">${icone("whatsapp")}</a>`;
 
 const COOKIES = `
   <div class="cookies" id="cookies" role="region" aria-label="Aviso de cookies">
-    <p>Usamos cookies para melhorar a sua experiência. <a href="#">Saber mais</a></p>
+    <p>Usamos cookies para melhorar a sua experiência. <a href="privacidade.html#cookies">Saber mais</a></p>
     <button class="btn btn--primario" type="button" data-aceitar>Aceitar</button>
   </div>`;
 
@@ -288,7 +304,7 @@ function aplicarLigacoes(raiz = document) {
 function preencherImagens() {
   document.querySelectorAll("[data-imagem]").forEach((el) => {
     const chave = el.dataset.imagem;
-    const carregamento = chave === "hero" ? "eager" : "lazy";
+    const carregamento = chave.startsWith("hero") ? "eager" : "lazy";
     el.innerHTML = mediaConteudo(IMAGENS[chave], el.dataset.alt, el.dataset.label, carregamento);
   });
 }
@@ -374,18 +390,22 @@ function renderizarHorario() {
 
   document.getElementById("horario-lista").innerHTML = ordem
     .map((dia) => {
-      const horas = HORARIO[dia];
+      const periodos = HORARIO[dia];
       const classe = dia === hoje ? ' class="horario__dia--hoje"' : "";
-      return `<li${classe}><span>${DIAS_SEMANA[dia]}</span><span>${horas ? `${horas[0]} – ${horas[1]}` : "Encerrado"}</span></li>`;
+      const horas = periodos ? periodos.map(([abre, fecha]) => `${abre} – ${fecha}`).join("<br>") : "Encerrado";
+      return `<li${classe}><span>${DIAS_SEMANA[dia]}</span><span class="horario__horas">${horas}</span></li>`;
     })
     .join("");
 
-  const horasHoje = HORARIO[hoje];
+  // Aberto se a hora atual cair num dos períodos de hoje; fechado ao almoço, diz quando reabre.
+  const periodosHoje = HORARIO[hoje] || [];
   const horaAtual = agora.toTimeString().slice(0, 5);
-  const aberto = Boolean(horasHoje) && horaAtual >= horasHoje[0] && horaAtual < horasHoje[1];
+  const atual = periodosHoje.find(([abre, fecha]) => horaAtual >= abre && horaAtual < fecha);
+  const seguinte = periodosHoje.find(([abre]) => horaAtual < abre);
   const estado = document.getElementById("horario-estado");
-  estado.textContent = aberto ? `Aberto agora · fecha às ${horasHoje[1]}` : "Fechado de momento";
-  estado.classList.toggle("estado--aberto", aberto);
+  if (atual) estado.textContent = `Aberto agora · fecha às ${atual[1]}`;
+  else estado.textContent = seguinte ? `Fechado de momento · abre às ${seguinte[0]}` : "Fechado de momento";
+  estado.classList.toggle("estado--aberto", Boolean(atual));
 }
 
 /* ===== COOKIES ===== */
@@ -409,19 +429,31 @@ function iniciarIntro() {
   document.body.insertAdjacentHTML(
     "beforeend",
     `<div class="intro" id="intro" aria-hidden="true">
-      <div class="intro__conteudo">
-        <img class="intro__logo" src="${LOGO}" alt="" width="120" height="120">
-        <span class="intro__linha"></span>
-        <p class="intro__nome">Salgueiro's <span>Barbearia</span></p>
-      </div>
+      <img class="intro__imagem" src="${IMAGEM_INTRO}" alt="" width="1200" height="1200">
     </div>`
   );
   const intro = document.getElementById("intro");
-  const remover = () => intro.remove();
+  const imagem = intro.querySelector("img");
+
+  // Desliza o ecrã para cima e liberta as animações de entrada da página
+  const sair = () => {
+    intro.classList.add("intro--sair");
+    document.documentElement.classList.remove("com-intro");
+  };
   intro.addEventListener("animationend", (evento) => {
-    if (evento.target === intro) remover();
+    if (evento.target === intro) intro.remove();
   });
-  setTimeout(remover, 3000); // rede de segurança caso a animação não chegue ao fim
+  // A contagem só começa com a imagem carregada, para não se ver um ecrã preto vazio
+  const mostrar = () => {
+    intro.classList.add("intro--pronta");
+    setTimeout(sair, 1200);
+  };
+  if (imagem.complete) mostrar();
+  else {
+    imagem.addEventListener("load", mostrar);
+    imagem.addEventListener("error", sair);
+  }
+  setTimeout(sair, 6000); // rede de segurança caso a imagem demore demasiado
 }
 
 /* ===== ANIMAÇÃO DE ENTRADA AO FAZER SCROLL ===== */

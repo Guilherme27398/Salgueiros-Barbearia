@@ -272,8 +272,39 @@
   color: var(--color-white);
 }
 
+/* ===== ABRIR O DETALHE DO SERVIÇO ===== */
+/* O nome do serviço é um botão cuja área clicável se estende ao cartão inteiro (ver servicos.js). */
+.assinatura,
+.servico-card {
+  position: relative;
+}
+
+.servico-abrir {
+  text-align: left;
+}
+
+.servico-abrir::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* Os botões "Marcar" ficam por cima dessa área, para continuarem a levar às marcações */
+.assinatura .btn,
+.servico-card .btn {
+  position: relative;
+  z-index: 1;
+}
+
+.servico-detalhe__duracao {
+  font-size: var(--fs-18);
+  font-weight: 400;
+  color: var(--color-gray);
+}
+
 /* ===== CARTÃO DE PRODUTO ===== */
 .produto-card {
+  position: relative;
   overflow: hidden;
   height: 100%;
   border: 1px solid var(--color-line-light);
@@ -316,6 +347,17 @@
 .produto-card__nome {
   margin-block: 4px var(--esp-8);
   font-size: var(--fs-24);
+}
+
+/* O nome abre o detalhe do produto; a área clicável estende-se ao cartão inteiro */
+.produto-card__abrir {
+  text-align: left;
+}
+
+.produto-card__abrir::after {
+  content: "";
+  position: absolute;
+  inset: 0;
 }
 
 .produto-card__preco {
@@ -452,6 +494,7 @@
   color: var(--color-danger);
 }
 
+.campo__ajuda:empty,
 .campo__erro:empty {
   display: none;
 }
@@ -589,6 +632,15 @@
   border-color: var(--color-black);
   color: var(--color-white);
   background: var(--color-black);
+}
+
+/* Opção sem stock (ex.: um tamanho esgotado) */
+.chip:disabled {
+  border-color: var(--color-line-light);
+  text-decoration: line-through;
+  color: var(--color-gray);
+  opacity: 0.5;
+  cursor: default;
 }
 
 /* ===== CARROSSEL ===== */
@@ -880,67 +932,42 @@
   z-index: 100;
   display: grid;
   place-items: center;
-  color: var(--color-white);
-  background: var(--color-black);
-  animation: intro-sair 600ms cubic-bezier(0.7, 0, 0.3, 1) 1700ms forwards;
+  background: #000;
 }
 
-.intro__conteudo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.intro--sair {
+  animation: intro-sair 600ms cubic-bezier(0.7, 0, 0.3, 1) forwards;
 }
 
-.intro__logo {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  animation: intro-logo 700ms ease both;
+/* Imagem quadrada ao centro; as margens esbatem-se para o fundo preto, sem se notar o recorte */
+.intro__imagem {
+  width: min(90vw, 90vh, 720px);
+  height: auto;
+  opacity: 0;
+  -webkit-mask-image: radial-gradient(closest-side, #000 88%, transparent);
+  mask-image: radial-gradient(closest-side, #000 88%, transparent);
 }
 
-.intro__linha {
-  width: 96px;
-  height: 1px;
-  margin-block: var(--esp-24) var(--esp-16);
-  background: var(--color-gold);
-  animation: intro-linha 600ms ease 400ms both;
+.intro--pronta .intro__imagem {
+  animation: intro-imagem 500ms ease forwards;
 }
 
-.intro__nome {
-  font-family: var(--font-titulo);
-  font-size: var(--fs-32);
-  text-align: center;
-  animation: entrar 600ms ease 600ms both;
-}
-
-.intro__nome span {
-  display: block;
-  margin-top: var(--esp-8);
-  font-family: var(--font-texto);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.6em;
-  text-indent: 0.6em;
-  text-transform: uppercase;
-  color: var(--color-gold);
+@keyframes intro-imagem {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* As animações de entrada da página esperam que a abertura termine */
-.com-intro {
-  --intro-atraso: 1900ms;
-}
-
-@keyframes intro-logo {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-}
-
-@keyframes intro-linha {
-  from {
-    transform: scaleX(0);
-  }
+.com-intro .hero__conteudo > *,
+.com-intro .pagina-cabecalho .container > *,
+.com-intro .login__conteudo,
+.com-intro .perfil-topo .container > * {
+  animation-play-state: paused;
 }
 
 @keyframes intro-sair {
@@ -957,6 +984,364 @@
   }
 }
 
+/* ===== CONTADOR NOS ÍCONES DA NAVBAR (carrinho e encomendas) ===== */
+.navbar__icone--contador {
+  position: relative;
+}
+
+.contador {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  min-width: 18px;
+  height: 18px;
+  padding-inline: 5px;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  color: var(--color-black);
+  background: var(--color-gold);
+}
+
+/* ===== SELETOR DE QUANTIDADE ===== */
+.quantidade {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-line-light);
+  border-radius: var(--raio);
+}
+
+.quantidade button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  transition: background-color var(--transicao), opacity var(--transicao);
+}
+
+.quantidade button:hover:not(:disabled) {
+  background: var(--color-line-light);
+}
+
+.quantidade button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.quantidade .icone {
+  width: 16px;
+  height: 16px;
+}
+
+.quantidade__valor {
+  min-width: 32px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ===== DETALHE DO PRODUTO ===== */
+/* Janela aberta ao clicar num produto (ver loja.js). */
+.produto-detalhe {
+  width: min(calc(100% - 2 * var(--esp-16)), 960px);
+  max-width: none;
+  max-height: calc(100dvh - 2 * var(--esp-16));
+  padding: 0;
+  border: 0;
+  border-radius: var(--raio);
+  color: var(--color-black);
+  background: var(--color-white);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+}
+
+.produto-detalhe[open] {
+  animation: entrar 240ms ease;
+}
+
+.produto-detalhe::backdrop,
+.carrinho::backdrop {
+  background: rgba(13, 13, 13, 0.7);
+}
+
+/* Os botões de fecho usam o ícone da navbar, aqui sobre fundo branco */
+.produto-detalhe .navbar__icone:hover,
+.carrinho .navbar__icone:hover {
+  color: var(--color-black);
+  background: var(--color-gold-soft);
+}
+
+.produto-detalhe__interior {
+  position: relative;
+  display: grid;
+  gap: var(--esp-24);
+  padding: var(--esp-16);
+}
+
+.produto-detalhe__fechar {
+  position: absolute;
+  top: var(--esp-8);
+  right: var(--esp-8);
+  z-index: 1;
+  background: var(--color-white);
+  box-shadow: var(--sombra);
+}
+
+.produto-detalhe__fotos {
+  display: grid;
+  align-content: start;
+  gap: var(--esp-8);
+}
+
+.produto-detalhe__miniaturas {
+  display: flex;
+  gap: var(--esp-8);
+}
+
+.produto-detalhe__miniatura {
+  width: 72px;
+  border: 2px solid transparent;
+  opacity: 0.6;
+  transition: border-color var(--transicao), opacity var(--transicao);
+}
+
+.produto-detalhe__miniatura:hover,
+.produto-detalhe__miniatura[aria-pressed="true"] {
+  opacity: 1;
+}
+
+.produto-detalhe__miniatura[aria-pressed="true"] {
+  border-color: var(--color-gold);
+}
+
+.produto-detalhe__corpo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--esp-16);
+}
+
+/* Tamanho, quantidade e botão de adicionar (redesenhados ao mudar de tamanho) */
+.produto-detalhe__compra {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--esp-16);
+  width: 100%;
+}
+
+.produto-detalhe__nome {
+  font-size: var(--fs-32);
+}
+
+.produto-detalhe__preco {
+  font-size: var(--fs-24);
+  font-weight: 600;
+}
+
+.produto-detalhe__descricao {
+  color: var(--color-gray);
+}
+
+.produto-detalhe__rotulo {
+  margin-bottom: var(--esp-8);
+  font-size: var(--fs-14);
+  font-weight: 600;
+}
+
+.produto-detalhe__nota {
+  font-size: var(--fs-14);
+  color: var(--color-gray);
+}
+
+.produto-detalhe__adicionar {
+  width: 100%;
+  margin-top: var(--esp-8);
+}
+
+.produto-detalhe__adicionar:disabled {
+  color: var(--color-gray);
+  background: var(--color-line-light);
+  cursor: default;
+}
+
+@media (min-width: 768px) {
+  .produto-detalhe__interior {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--esp-32);
+    padding: var(--esp-32);
+  }
+
+  /* O botão de fecho fica por cima desta coluna */
+  .produto-detalhe__corpo {
+    padding-top: var(--esp-24);
+  }
+}
+
+/* ===== CARRINHO ===== */
+/* Painel lateral à direita, aberto pelo ícone do carrinho na navbar (ver loja.js). */
+.carrinho {
+  inset: 0 0 0 auto;
+  width: min(92vw, 420px);
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-left: 1px solid var(--color-gold);
+  color: var(--color-black);
+  background: var(--color-white);
+}
+
+.carrinho[open] {
+  animation: carrinho-entrar 240ms ease;
+}
+
+@keyframes carrinho-entrar {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+.carrinho__interior {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.carrinho__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--esp-16) var(--esp-16) var(--esp-16) var(--esp-24);
+  border-bottom: 1px solid var(--color-line-light);
+}
+
+.carrinho__titulo {
+  font-size: var(--fs-24);
+}
+
+.carrinho__corpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.carrinho__lista {
+  flex: 1;
+  overflow-y: auto;
+  padding-inline: var(--esp-24);
+}
+
+.carrinho__linha {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  gap: var(--esp-16);
+  padding-block: var(--esp-16);
+  border-bottom: 1px solid var(--color-line-light);
+}
+
+.carrinho__foto {
+  align-self: start;
+}
+
+.carrinho__foto .media__vazio span {
+  display: none;
+}
+
+.carrinho__nome {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.carrinho__detalhe {
+  font-size: var(--fs-14);
+  color: var(--color-gray);
+}
+
+.carrinho__acoes {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-8);
+  margin-top: var(--esp-8);
+}
+
+.carrinho__remover {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--raio);
+  color: var(--color-gray);
+  transition: color var(--transicao), background-color var(--transicao);
+}
+
+.carrinho__remover:hover {
+  color: var(--color-white);
+  background: var(--color-danger);
+}
+
+.carrinho__subtotal {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.carrinho__rodape {
+  display: grid;
+  gap: var(--esp-8);
+  padding: var(--esp-24);
+  border-top: 1px solid var(--color-line-light);
+}
+
+.carrinho__total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--esp-16);
+}
+
+.carrinho__total strong {
+  font-size: var(--fs-24);
+  font-weight: 600;
+}
+
+.carrinho__nota {
+  margin-bottom: var(--esp-8);
+  font-size: var(--fs-14);
+  color: var(--color-gray);
+}
+
+/* Carrinho vazio e confirmação da compra */
+.carrinho__mensagem {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-16);
+  padding: var(--esp-32) var(--esp-24);
+  text-align: center;
+  color: var(--color-gray);
+}
+
+.carrinho__mensagem > .icone {
+  width: 40px;
+  height: 40px;
+  color: var(--color-gold);
+}
+
+.carrinho__mensagem--sucesso > .icone {
+  color: var(--color-success);
+}
+
+.carrinho__mensagem-titulo {
+  font-family: var(--font-titulo);
+  font-size: var(--fs-24);
+  color: var(--color-black);
+}
+
 /* ===== BOTÃO FLUTUANTE DE WHATSAPP ===== */
 .whatsapp {
   position: fixed;
@@ -968,20 +1353,23 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  color: var(--color-black);
-  background: var(--color-gold);
+  color: var(--color-white);
+  background: var(--color-whatsapp);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
   transition: background-color var(--transicao), transform var(--transicao);
 }
 
 .whatsapp:hover {
-  background: var(--color-gold-hover);
+  background: var(--color-whatsapp-hover);
   transform: scale(1.06);
 }
 
+/* O logótipo do WhatsApp é preenchido, ao contrário dos restantes ícones (de traço) */
 .whatsapp .icone {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
+  fill: currentColor;
+  stroke: none;
 }
 
 /* ===== AVISO DE COOKIES ===== */

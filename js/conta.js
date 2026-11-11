@@ -1,4 +1,4 @@
-/* Perfil do cliente: resumo na barbearia, compras e dados pessoais editáveis. */
+/* Perfil do cliente: compras e dados pessoais editáveis. */
 
 const ERROS_DADOS = {
   nome: "Escreva o seu nome.",
@@ -6,25 +6,10 @@ const ERROS_DADOS = {
   telemovel: "Escreva um número válido, por exemplo +351 910 000 000.",
 };
 
-function resumoVisitas(visitas) {
-  const contagem = {};
-  visitas.forEach((visita) => {
-    contagem[visita.servico] = (contagem[visita.servico] || 0) + 1;
-  });
-  const habitual = Object.entries(contagem).sort((a, b) => b[1] - a[1])[0][0];
-  const ultima = [...visitas].sort((a, b) => b.data.localeCompare(a.data))[0];
-  return { total: visitas.length, habitual, ultima };
-}
-
 function renderizarTopo() {
-  const resumo = resumoVisitas(UTILIZADOR.visitas);
   const desde = new Date(`${UTILIZADOR.clienteDesde}T00:00`).toLocaleDateString("pt-PT", { month: "long", year: "numeric" });
 
   document.getElementById("perfil-desde").textContent = `Cliente desde ${desde}`;
-  document.getElementById("perfil-resumo").innerHTML = `
-    <div><dt>Cortes feitos</dt><dd>${resumo.total}</dd></div>
-    <div><dt>Corte mais habitual</dt><dd>${resumo.habitual}</dd></div>
-    <div><dt>Última visita</dt><dd>${formatarData(resumo.ultima.data)}</dd></div>`;
   atualizarNome();
 }
 
@@ -38,44 +23,74 @@ function atualizarNome() {
 }
 
 /* ===== COMPRAS ===== */
+const ORDENS_COMPRAS = {
+  "data-desc": (a, b) => b.data.localeCompare(a.data),
+  "data-asc": (a, b) => a.data.localeCompare(b.data),
+  "total-desc": (a, b) => b.total - a.total,
+  "total-asc": (a, b) => a.total - b.total,
+};
+
+// Cada compra é um cartão com a data, os artigos (quantidade, tamanho e preço) e o total.
 function iniciarCompras() {
   const lista = document.getElementById("perfil-compras");
-  // Um produto que o administrador entretanto eliminou deixa de aparecer nas compras.
-  const compras = [...UTILIZADOR.compras]
-    .filter((compra) => PRODUTOS.some((item) => item.nome === compra.produto))
-    .sort((a, b) => b.data.localeCompare(a.data));
+  const ordem = document.getElementById("compras-ordem");
 
-  lista.innerHTML = compras
-    .map((compra, indice) => {
-      const produto = PRODUTOS.find((item) => item.nome === compra.produto);
-      const emStock = produto.stock > 0;
-      return `
-      <li style="--i: ${indice}">
-        <article class="produto-card compra-card${emStock ? "" : " produto-card--esgotado"}">
-          <div class="media media--1x1">${mediaConteudo(produto.imagem, produto.nome, "Fotografia do produto · 1:1")}</div>
-          <div class="produto-card__corpo">
-            <p class="produto-card__marca">Comprado a ${formatarData(compra.data)}</p>
-            <h2 class="produto-card__nome">${produto.nome}</h2>
-            <p class="produto-card__preco">${formatarPreco(produto.preco)}</p>
-            ${
-              emStock
-                ? `<button class="btn btn--contorno compra-card__acao" type="button" data-recomprar="${indice}">Voltar a comprar</button>`
-                : '<button class="btn btn--contorno compra-card__acao" type="button" disabled>Esgotado</button>'
-            }
+  // Compras de exemplo, feitas e pagas na barbearia: o preço é o atual do produto, e um produto
+  // que o administrador entretanto eliminou deixa de aparecer.
+  const naBarbearia = UTILIZADOR.compras.map((compra) => ({
+    data: compra.data,
+    pago: true,
+    itens: compra.itens
+      .filter((item) => PRODUTOS.some((produto) => produto.nome === item.produto))
+      .map((item) => ({ nome: item.produto, tamanho: item.tamanho, quantidade: item.quantidade, preco: PRODUTOS.find((produto) => produto.nome === item.produto).preco })),
+  }));
+  // Compras que este cliente finalizou no carrinho (ver loja.js): ficam por levantar e pagar na barbearia.
+  const noSite = lerListaGuardada("encomendas")
+    .filter((encomenda) => encomenda.cliente.email === UTILIZADOR.email)
+    .map((encomenda) => ({ data: encomenda.data, pago: false, itens: encomenda.itens }));
+  const compras = [...naBarbearia, ...noSite]
+    .filter((compra) => compra.itens.length)
+    .map((compra) => ({ ...compra, total: arredondar(compra.itens.reduce((soma, item) => soma + item.preco * item.quantidade, 0)) }));
+
+  // "Voltar a comprar" abre o detalhe do produto (data-produto, tratado em loja.js), onde se escolhe o tamanho e a quantidade.
+  function voltarAComprarHTML(item) {
+    const produto = PRODUTOS.find((candidato) => candidato.nome === item.nome);
+    if (!produto) return "";
+    return produto.stock > 0
+      ? `<button class="encomenda__acao" type="button" data-produto="${PRODUTOS.indexOf(produto)}">Voltar a comprar</button>`
+      : '<p class="encomenda__detalhe">Esgotado de momento</p>';
+  }
+
+  function compraHTML(compra, indice) {
+    const unidades = compra.itens.reduce((soma, item) => soma + item.quantidade, 0);
+    // As compras de exemplo só têm o dia; as do site têm também a hora.
+    const dia = new Date(compra.data.length === 10 ? `${compra.data}T00:00` : compra.data).toLocaleDateString("pt-PT");
+    return `
+      <li class="encomenda" style="--i: ${Math.min(indice, 8)}">
+        <div class="encomenda__cabecalho">
+          <div>
+            <h2 class="encomenda__nome">Compra de ${dia}</h2>
+            <p class="encomenda__detalhe">${contarArtigos(unidades)} · ${compra.pago ? "comprado na barbearia" : "encomendado no site"}</p>
           </div>
-        </article>
+          <span class="badge${compra.pago ? " badge--escuro" : ""}">${compra.pago ? "Pago" : "Por pagar"}</span>
+        </div>
+        <ul class="encomenda__itens">${compra.itens.map((item) => artigoEncomendaHTML(item, voltarAComprarHTML(item))).join("")}</ul>
+        <div class="encomenda__rodape">
+          <p class="encomenda__detalhe">${compra.pago ? "Pago na barbearia" : "Levantar e pagar na barbearia"}</p>
+          <p class="encomenda__total"><span>${compra.pago ? "Total pago" : "Total a pagar"}</span><strong>${formatarPreco(compra.total)}</strong></p>
+        </div>
       </li>`;
-    })
-    .join("");
+  }
 
-  // Compra simulada: no protótipo não há carrinho nem pagamento.
-  lista.addEventListener("click", (evento) => {
-    const botao = evento.target.closest("[data-recomprar]");
-    if (!botao) return;
-    botao.disabled = true;
-    botao.innerHTML = `${icone("check")}Reservado`;
-    mostrarAviso(`Reserva feita: ${compras[Number(botao.dataset.recomprar)].produto}. Levante e pague na barbearia.`);
-  });
+  function renderizar() {
+    const escolhida = ordem.querySelector("input:checked").value;
+    lista.innerHTML = compras.length
+      ? [...compras].sort(ORDENS_COMPRAS[escolhida]).map(compraHTML).join("")
+      : '<li class="compras__vazio">Ainda não fez compras. Quando comprar um produto, aparece aqui.</li>';
+  }
+
+  ordem.addEventListener("change", renderizar);
+  renderizar();
 }
 
 /* ===== OS MEUS DADOS ===== */
@@ -83,7 +98,7 @@ function iniciarDados() {
   const formulario = document.getElementById("perfil-form");
   const campos = [...formulario.querySelectorAll(".campo__controlo")];
   const editar = document.getElementById("dados-editar");
-  const guardarBotao = document.getElementById("dados-guardar");
+  const acoes = document.getElementById("dados-acoes");
   const cancelar = document.getElementById("dados-cancelar");
 
   function preencher() {
@@ -97,8 +112,8 @@ function iniciarDados() {
   function modoEdicao(ativo) {
     campos.forEach((campo) => (campo.readOnly = !ativo));
     editar.hidden = ativo;
-    guardarBotao.hidden = !ativo;
-    cancelar.hidden = !ativo;
+    acoes.hidden = !ativo;
+    formulario.classList.toggle("perfil-dados--edicao", ativo);
   }
 
   function validar(campo) {
@@ -140,7 +155,6 @@ function iniciarDados() {
   });
 
   preencher();
-  document.getElementById("perfil-sair").addEventListener("click", terminarSessao);
 }
 
 function iniciarConta() {

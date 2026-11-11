@@ -12,6 +12,8 @@
   --color-line-light: rgba(13, 13, 13, 0.12);
   --color-danger: #b42318;
   --color-success: #2e7d4f;
+  --color-whatsapp: #25d366;
+  --color-whatsapp-hover: #1ebe5a;
 
   --font-titulo: "Playfair Display", Georgia, serif;
   --font-texto: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;

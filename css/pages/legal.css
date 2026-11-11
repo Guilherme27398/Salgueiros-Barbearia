@@ -1,0 +1,72 @@
+/* ===== PÁGINAS LEGAIS (Termos de Utilização e Política de Privacidade) ===== */
+/* Texto corrido numa coluna estreita, para se ler bem. */
+.legal {
+  padding-block: var(--esp-48) var(--esp-64);
+}
+
+.legal__texto {
+  max-width: 760px;
+}
+
+.legal__data {
+  margin-bottom: var(--esp-32);
+  font-size: var(--fs-14);
+  color: var(--color-gray);
+}
+
+.legal__texto h2 {
+  margin-block: var(--esp-48) var(--esp-16);
+  font-size: var(--fs-24);
+  scroll-margin-top: calc(var(--navbar-altura) + var(--esp-16)); /* as âncoras não ficam por baixo da navbar */
+}
+
+.legal__texto h2:first-of-type {
+  margin-top: 0;
+}
+
+.legal__texto p,
+.legal__texto ul,
+.legal__texto dl {
+  margin-bottom: var(--esp-16);
+}
+
+.legal__texto ul {
+  padding-left: var(--esp-24);
+  list-style: disc;
+}
+
+.legal__texto li + li {
+  margin-top: var(--esp-8);
+}
+
+.legal__texto a {
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+}
+
+.legal__texto a:hover {
+  color: var(--color-gray);
+}
+
+/* Lista "para que usamos os dados": finalidade em destaque e explicação por baixo */
+.legal__texto dt {
+  font-weight: 600;
+}
+
+.legal__texto dd {
+  margin: 4px 0 var(--esp-16);
+  color: var(--color-gray);
+}
+
+/* Ligação para a outra página legal, no fim do texto */
+.legal__outra {
+  margin-top: var(--esp-48);
+  padding-top: var(--esp-24);
+  border-top: 1px solid var(--color-line-light);
+}
+
+@media (min-width: 768px) {
+  .legal {
+    padding-block: var(--esp-64) var(--esp-96);
+  }
+}

@@ -43,7 +43,7 @@
   width: 100%;
   max-width: 600px;
   animation: entrar 600ms ease both;
-  animation-delay: calc(var(--intro-atraso, 0ms) + 100ms);
+  animation-delay: 100ms;
 }
 
 .login__logo {
@@ -113,18 +113,14 @@
 
 /* ===== PERFIL: TOPO ===== */
 .perfil-topo {
-  padding: calc(var(--navbar-altura) + var(--esp-48)) 0 0;
+  padding: calc(var(--navbar-altura) + var(--esp-48)) 0 var(--esp-48);
   color: var(--color-white);
   background: radial-gradient(ellipse at 20% 0%, #2a2418, var(--color-black) 70%);
 }
 
 .perfil-topo .container > * {
   animation: entrar 600ms ease both;
-  animation-delay: calc(var(--intro-atraso, 0ms) + 100ms);
-}
-
-.perfil-topo .container > :nth-child(2) {
-  animation-delay: calc(var(--intro-atraso, 0ms) + 240ms);
+  animation-delay: 100ms;
 }
 
 .perfil-topo__identidade {
@@ -142,41 +138,6 @@
 .perfil-topo__desde {
   margin-top: 4px;
   color: var(--color-gray-light);
-}
-
-/* Resumo: cortes feitos, corte mais habitual e última visita */
-.perfil-resumo {
-  margin-top: var(--esp-32);
-  border-top: 1px solid var(--color-line-dark);
-}
-
-.perfil-resumo > div {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--esp-16);
-  padding-block: var(--esp-16);
-  border-bottom: 1px solid var(--color-line-dark);
-}
-
-.perfil-resumo > div:last-child {
-  border-bottom: 0;
-}
-
-.perfil-resumo dt {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-gray-light);
-}
-
-.perfil-resumo dd {
-  margin: 0;
-  font-family: var(--font-titulo);
-  font-size: var(--fs-18);
-  font-weight: 600;
-  text-align: right;
 }
 
 /* ===== PERFIL: SEPARADORES ===== */
@@ -226,73 +187,229 @@
 }
 
 /* ===== PERFIL: COMPRAS ===== */
-.perfil-compras {
+/* Opções para organizar por cima (ecrãs estreitos) ou à esquerda (ecrãs largos) e um cartão por compra. */
+.compras {
   display: grid;
+  gap: var(--esp-24);
+}
+
+.compras__filtros {
+  padding: var(--esp-24);
+  border: 1px solid var(--color-line-light);
+  border-radius: var(--raio);
+}
+
+.compras__grupo {
+  display: grid;
+  gap: var(--esp-8);
+  min-width: 0;
+  margin: 0;
+  padding: var(--esp-24) 0 0;
+  border: 0;
+}
+
+.compras__grupo:first-child {
+  padding-top: 0;
+}
+
+.compras__titulo {
+  float: left; /* a legenda passa a contar como um elemento normal dentro da grelha */
+  width: 100%;
+  padding: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gray);
+}
+
+.compras__grupo .caixa {
+  align-items: center;
+  min-height: 32px;
+  font-size: var(--fs-16);
+}
+
+.compras__lista {
+  display: grid;
+  align-content: start;
   gap: var(--esp-16);
 }
 
-.perfil-compras > li {
+.compras__lista > li {
   animation: entrar 400ms ease both;
-  animation-delay: calc(var(--i) * 50ms);
+  animation-delay: calc(var(--i, 0) * 50ms);
 }
 
-/* Em ecrãs estreitos, a fotografia fica ao lado do texto */
-.compra-card {
+.compras__vazio {
+  padding: var(--esp-24);
+  border: 1px dashed var(--color-line-light);
+  border-radius: var(--raio);
+  color: var(--color-gray);
+}
+
+/* ===== CARTÃO DE ENCOMENDA ===== */
+/* Usado nas compras do perfil e nas encomendas do painel de administração (que soma o que é só dele em admin.css). */
+.encomenda {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-16);
+  padding: var(--esp-24);
+  border: 1px solid var(--color-line-light);
+  border-radius: var(--raio);
+  background: var(--color-white);
+  box-shadow: var(--sombra);
+}
+
+/* Data da compra à esquerda e estado (pago ou por pagar) à direita */
+.encomenda__cabecalho {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--esp-16);
+}
+
+.encomenda__nome {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-8);
+  font-size: var(--fs-18);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.encomenda__detalhe {
+  font-size: var(--fs-14);
+  color: var(--color-gray);
+}
+
+.encomenda__itens {
   display: grid;
-  grid-template-columns: 120px 1fr;
+  flex: 1;
+  align-content: start;
+  border-top: 1px solid var(--color-line-light);
 }
 
-.compra-card:hover {
-  transform: none;
+.encomenda__item {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--esp-16);
+  padding-block: var(--esp-8);
+  border-bottom: 1px solid var(--color-line-light);
 }
 
-.compra-card .media {
-  height: 100%;
-  aspect-ratio: auto; /* ao lado do texto, a fotografia ocupa a altura do cartão */
-}
-
-.compra-card .produto-card__corpo {
-  min-width: 0;
-}
-
-.compra-card .media__vazio span {
+.encomenda__foto .media__vazio span {
   display: none;
 }
 
-.compra-card .produto-card__corpo {
-  display: flex;
-  flex-direction: column;
-  padding: var(--esp-16);
+.encomenda__produto {
+  font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
-.compra-card .produto-card__nome {
-  font-size: var(--fs-18);
+.encomenda__acao {
+  min-height: 32px;
+  font-size: var(--fs-14);
+  font-weight: 600;
+  text-decoration: underline;
 }
 
-.compra-card__acao {
-  align-self: flex-start;
-  min-height: 44px;
-  margin-top: var(--esp-16);
-  padding-inline: var(--esp-16);
-}
-
-.compra-card__acao:disabled {
-  border-color: var(--color-line-light);
+.encomenda__acao:hover {
   color: var(--color-gray);
-  cursor: default;
-  background: none;
 }
 
-.compra-card__acao .icone {
-  width: 16px;
-  height: 16px;
+.encomenda__subtotal {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.encomenda__rodape {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--esp-8) var(--esp-16);
+}
+
+.encomenda__total {
+  display: flex;
+  align-items: baseline;
+  gap: var(--esp-8);
+  margin-left: auto;
+}
+
+.encomenda__total strong {
+  font-size: var(--fs-24);
+  font-weight: 600;
 }
 
 /* ===== PERFIL: OS MEUS DADOS ===== */
+/* Cartão com um dado por linha; "Editar dados" (.perfil-dados--edicao) torna os campos editáveis. */
 .perfil-dados {
-  display: grid;
-  gap: var(--esp-24);
   max-width: 720px;
+  padding: var(--esp-24);
+  border: 1px solid var(--color-line-light);
+  border-radius: var(--raio);
+  background: var(--color-white);
+  box-shadow: var(--sombra);
+  transition: border-color var(--transicao);
+}
+
+.perfil-dados--edicao {
+  border-color: var(--color-gold);
+}
+
+.perfil-dados__topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-16);
+  padding-bottom: var(--esp-24);
+}
+
+/* O texto encolhe para o botão "Editar dados" ficar na mesma linha */
+.perfil-dados__topo > div {
+  flex: 1 1 240px;
+}
+
+.perfil-dados__titulo {
+  font-size: var(--fs-24);
+}
+
+.perfil-dados__texto {
+  margin-top: 4px;
+  font-size: var(--fs-14);
+  color: var(--color-gray);
+}
+
+.perfil-dados__topo .btn {
+  min-height: 44px;
+  padding-inline: var(--esp-24);
+}
+
+/* Ícone à esquerda, rótulo e valor à direita */
+.perfil-dados__linha {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: start;
+  gap: var(--esp-16);
+  padding-block: var(--esp-16);
+  border-top: 1px solid var(--color-line-light);
+}
+
+.perfil-dados__icone {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--color-gold-soft);
+}
+
+.perfil-dados .campo--bloco {
+  gap: 4px;
 }
 
 .perfil-dados .campo__rotulo {
@@ -304,11 +421,16 @@
 
 /* Fora do modo de edição, o campo lê-se como texto simples */
 .perfil-dados .campo__controlo[readonly] {
-  min-height: 32px;
+  min-height: 28px;
   padding-inline: 0;
   border-color: transparent;
   font-size: var(--fs-18);
+  font-weight: 600;
   box-shadow: none;
+}
+
+.perfil-dados--edicao .campo--bloco {
+  gap: var(--esp-8);
 }
 
 .perfil-dados__acoes {
@@ -316,13 +438,15 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--esp-16) var(--esp-24);
-  padding-top: var(--esp-8);
+  padding-top: var(--esp-24);
+  border-top: 1px solid var(--color-line-light);
 }
 
 .perfil-dados__cancelar {
   color: var(--color-gray);
 }
 
+/* Terminar sessão/* Terminar sessão (usado no rodapé do painel de administração) */
 .perfil__sair {
   display: inline-flex;
   align-items: center;
@@ -396,64 +520,12 @@
     flex: 1;
   }
 
-  .perfil-resumo {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    margin-top: var(--esp-48);
-  }
-
-  .perfil-resumo > div {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: var(--esp-8);
-    padding: var(--esp-24) var(--esp-24) var(--esp-32);
-    border-bottom: 0;
-    border-left: 1px solid var(--color-line-dark);
-  }
-
-  .perfil-resumo > div:first-child {
-    padding-left: 0;
-    border-left: 0;
-  }
-
-  .perfil-resumo dd {
-    font-size: var(--fs-24);
-    text-align: left;
-  }
-
   .perfil {
     padding-block: var(--esp-48) var(--esp-96);
   }
 
-  .perfil-compras {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--esp-24);
-  }
-
-  .compra-card {
-    display: block;
-  }
-
-  .compra-card .media {
-    height: auto;
-    aspect-ratio: 1 / 1;
-  }
-
-  .compra-card .produto-card__corpo {
-    padding: var(--esp-16) var(--esp-24) var(--esp-24);
-  }
-
-  .compra-card__acao {
-    align-self: stretch;
-  }
-
   .perfil-dados {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .perfil-dados__acoes {
-    grid-column: 1 / -1;
+    padding: var(--esp-32);
   }
 }
 
@@ -466,7 +538,15 @@
     display: block;
   }
 
-  .perfil-compras {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+  /* As opções para organizar acompanham o scroll da lista de compras */
+  .compras {
+    grid-template-columns: 260px minmax(0, 1fr);
+    align-items: start;
+    gap: var(--esp-48);
+  }
+
+  .compras__filtros {
+    position: sticky;
+    top: calc(var(--navbar-altura) + var(--esp-24));
   }
 }
